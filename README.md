@@ -34,15 +34,18 @@ Guide to setting up Whonix on a dedicated server with no GUI:
 
 ## Requirements:
 
-php7.2 php7.2-xml php7.2-mysql php7.2-mbstrings php7.2-json php7.2-dev php7.2-curl php7.2-bcmath mysql5.7 gnugp
+php7.2 php7.2-xml php7.2-mysql php7.2-mbstrings php7.2-json php7.2-dev php7.2-curl php7.2-bcmath php7.2-gd mysql5.7 gnugp
 
 How to install gnupg for php: https://secure.php.net/manual/en/gnupg.installation.php
 
 ## How to Install:
 
 1. Put content in web directory
-2. Point request to public/index.php
-3. Navigate to /install/
-4. Login as admin and create categories
-5. Modify config/rpc.yaml with your rpc info
-6. Add a PGP key without a password to the config .key files
+2. Use composer to install requirements
+3. Create .gnupg folder one level up of the marketplace directory. Make sure web server has write permissions.
+4. Web server has write permissions on /public/uploads/
+4. Point request to public/index.php
+5. Navigate to /install/
+6. Login as admin and create categories
+7. Modify config/rpc.yaml with your rpc info
+8. Add a PGP key without a password to the config .key files
