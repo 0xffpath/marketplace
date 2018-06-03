@@ -1,0 +1,51 @@
+security:
+    providers:
+        db_provider:
+            entity:
+                class: App:User
+                property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            pattern: ^/
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: /home
+                csrf_token_generator: security.csrf.token_manager
+            logout:
+                path:   logout
+                target: login
+    encoders:
+        App\Entity\User: bcrypt
+    access_control:
+        - { path: ^/login, allow_if: not has_role('buyer') and not has_role('vendor') }
+        - { path: ^/register, allow_if: not has_role('buyer') and not has_role('vendor') }
+        - { path: ^/dashboard, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/notifications, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/orders, allow_if: has_role('buyer') or has_role('vendor')}
+        - { path: ^/order, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/listings, allow_if: has_role('vendor') }
+        - { path: ^/listing, allow_if: has_role('vendor') }
+        - { path: ^/pgp, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/currency, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/messages, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/message, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/account, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/affiliates, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/newvendor, allow_if: has_role('new_vendor') }
+        - { path: ^/settings, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/vendor, allow_if: has_role('vendor') or has_role('new_vendor') }
+        - { path: ^/staff/login, allow_if: not has_role('admin') }
+        - { path: ^/staff, allow_if: has_role('admin') }
+        - { path: ^/report, allow_if: has_role('vendor') or has_role('buyer') }
+        - { path: ^/shipping, allow_if: has_role('vendor') }
+        - { path: ^/image, allow_if: has_role('vendor') }
+        - { path: ^/wishlist, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/buy, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/pay, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/forum/post, allow_if: has_role('buyer') or has_role('vendor') }
+        - { path: ^/market, allow_if: not has_role('vendor') }

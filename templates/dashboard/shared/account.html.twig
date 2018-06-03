@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Account{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        {% set tab = app.request.get('tab') %}
+                                        <li></li>
+                                        {% if app.user.roles.0 == 'admin' %}
+                                            <li role="nav" class="is-active"><a href=""><i class="fa fa-gears"></i>&nbsp;Account</a></li>
+                                        {% else %}
+                                            <li role="nav" class="is-active"><a href=""><i class="fa fa-gears"></i>&nbsp;Account</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                You joined on {{ date|date("F j, Y, g:i a") }} UTC. Your account is a {{ type }} account.
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(accountForm) }}
+                                <div class="field">
+                                    <label class="label">New Password</label>
+                                    <div class="control">
+                                        {{ form_widget(accountForm.new) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Confirm Password</label>
+                                    <div class="control">
+                                        {{ form_widget(accountForm.confirm) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Old Password</label>
+                                    <div class="control">
+                                        {{ form_widget(accountForm.old) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Enter Pin</label>
+                                    <div class="control">
+                                        {{ form_widget(accountForm.pin) }}
+                                    </div>
+                                </div>
+                                {{ form_row(accountForm.save) }}
+                                <br>
+                                {% for flashMessage in app.session.flashbag.get('accountError') %}
+                                    <div class="message is-danger">
+                                        <article class="message-body">{{ flashMessage }}</article>
+                                    </div>
+                                {% endfor %}
+                                {% for flashMessage in app.session.flashbag.get('accountSuccess') %}
+                                    <div class="message is-success">
+                                        <article class="message-body">{{ flashMessage }}</article>
+                                    </div>
+                                {% endfor %}
+                                {{ form_end(accountForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

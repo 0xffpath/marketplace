@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Listings{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}" />
+{% endblock %}
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a href="/listing/"><i class="fa fa-list"></i>&nbsp;Listings</a></li>
+                                        <li role="nav"><a href="/listing/new/"><i class="fa fa-plus"></i>&nbsp;New</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <div class="card">
+                                    <header class="card-header-title is-paddingless-bottom">
+                                        <div class="card-header-title">
+                                            Terms and Conditions
+                                        </div>
+                                    </header>
+                                    <div class="card-content is-paddingless-top">
+                                        <div class="content">
+                                            {% if tac %}
+                                                {{ tac|nl2br }}
+                                            {% else %}
+                                                <p>Nothing here.</p>
+                                            {% endif %}
+                                            <div class="col-sm-12">
+                                                <a href="/listings/tac/">Edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if listings is empty %}
+                                <div class="column is-full">
+                                    <div class="message is-warning">
+                                        <article class="message-body">
+                                            No listings.
+                                        </article>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="column is-half">
+                                    <form action="" role="search">
+                                        <div class="field has-addons">
+                                            <input type="text" autocomplete="off" name="search" value="{{ app.request.get("search") }}" class="input search-bar" placeholder="Find by title or id">
+                                            <button type="submit" class="button is-success search-button">
+                                                Search
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="column is-half">
+                                    {% if app.request.get("search") %}
+                                        <a class="button is-warning" href="{{ path(app.request.attributes.get("_route")) }}">Clear Search</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            {% for listing in listings %}
+                                <div class="column is-half">
+                                    <a href="/l/{{ listing.uuid }}/" title="{{ listing.title }}" style="color:inherit;">
+                                        <div class="card card-flex">
+                                            <header class="card-header">
+                                                <div class="card-header-title">
+                                                    {{ listing.type == 'physical' ? '<div class="tag is-primary">physical</div>' : '<div class="tag is-primary">digital</div>' }}
+                                                </div>
+                                                <div class="card-header-title is-block">
+                                                    {{ listing.flag == true and listing.step == 7 ? '<div class="tag is-danger is-pulled-right">flagged</div>' }}
+                                                    {{ listing.step < 7 and listing.flag == true ? '<div class="tag is-warning is-pulled-right">incomplete</div>' }}
+                                                </div>
+                                            </header>
+                                            <div class="card-content">
+                                                <div class="media">
+                                                    <div class="media-left">
+                                                        <figure class="image">
+                                                            <img src="/uploads/images/{{ listing_images.getImage(listing.uuid, 0) }}">
+                                                        </figure>
+                                                    </div>
+                                                </div>
+                                                <div class="content">
+                                                    <div class="columns is-multiline">
+                                                        <div class="column is-full">
+                                                            <p class="title is-6">{{ listing.title }}</p>
+                                                        </div>
+                                                        <div class="column">
+                                                            {{ listing.price }} {{ listing.fiat }}
+                                                        </div>
+                                                        <div class="column">
+                                                            <div class="is-pulled-right">
+                                                                {% if listing.btc %}<i class="cc BTC"></i>{% endif %}
+                                                                {% if listing.xmr %}<i class="cc XMR"></i>{% endif %}
+                                                                {% if listing.zec %}<i class="cc ZEC"></i>{% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer card-footer-flex">
+                                                <div class="card-footer-item">
+                                                    <a class="button is-danger" href="/listing/delete/{{ listing.uuid }}/">delete</a>
+                                                </div>
+                                                <div class="card-footer-item">
+                                                    <a class="button is-warning" href="/listing/edit/{{ listing.uuid }}/">edit</a>
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

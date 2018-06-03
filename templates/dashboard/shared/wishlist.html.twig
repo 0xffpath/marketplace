@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Wishlist{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active">
+                                            <a><i class="fa fa-heart"></i>&nbsp;Wishlist</a>
+                                        </li>
+                                        <li class="is-pulled-right" style="margin-left:auto;">
+                                            {% if link is empty %}
+                                                <a class="button is-success is-small" href="/wishlist/status/update/">Make Public</a>
+                                            {% else %}
+                                                <a class="button is-danger is-small" href="/wishlist/status/update/">Make Private</a>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                {% if listings is empty %}
+                                    <div class="message">
+                                        <article class="message-body">
+                                            <h2>You have no listings in your wishlist.</h2>
+                                        </article>
+                                    </div>
+                                {% endif %}
+                                <div class="columns is-multiline">
+                                    {% if link is not empty %}
+                                        <div class="column is-full">
+                                            <p class="is-block wishlist-link">{{ link }}</p>
+                                        </div>
+                                    {% endif %}
+                                    {% for listing in listings %}
+                                        <div class="column is-one-third">
+                                            <div class="card card-flex">
+                                                <div class="card-header">
+                                                    <div class="card-header-title is-block">
+                                                        <a class="wishlist-close" href="/wishlist/{{ listing.uuid }}/"><i class="fa fa-window-close"></i></a>
+                                                        <a target="_blank" class="button is-small is-pulled-right is-success" href="/l/{{ listing.uuid }}/">view</a>
+                                                    </div>
+                                                </div>
+                                                    <div class="card-content listing-image">
+                                                        <div class="media">
+                                                            <figure class="image">
+                                                                <img src="/uploads/images/{{ listing_images.getImage(listing.uuid, 0) }}">
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+                                                <div class="card-content is-paddingless-top">
+                                                    <div class="columns is-multiline" style="align-content:flex-end;">
+                                                        <div class="column is-full">
+                                                            <span class="title is-6">{{ listing.title[:35] }}{{ listing.title|length > 35 ? '...' }}</span>
+                                                            {% if listing.rating is not null %}
+                                                                <span class="is-6 is-pulled-right">{{ listing.rating }}%</span>
+                                                            {% else %}
+                                                                <span class="is-6 is-pulled-right"><i class="fa fa-leaf"></i></span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <footer class="card-footer card-footer-flex">
+                                                    <div class="card-footer-item">
+                                                        {{ listing.price }} {{ listing.fiat }}
+                                                    </div>
+                                                    <div class="card-footer-item">
+                                                        {% if listing.btc %}<i class="cc BTC"></i>&nbsp;{% endif %}
+                                                        {% if listing.xmr %}<i class="cc XMR"></i>&nbsp;{% endif %}
+                                                        {% if listing.zec %}<i class="cc ZEC"></i>&nbsp;{% endif %}
+                                                    </div>
+                                                </footer>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

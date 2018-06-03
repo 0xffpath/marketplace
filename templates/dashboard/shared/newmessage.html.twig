@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - New Message{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        {% if app.user.roles.0 == 'buyer' or app.user.roles.0 == 'vendor' %}
+                                            <li role="nav">
+                                                <a href="/messages/"><i class="fa fa-envelope"></i>&nbsp;Messages</a>
+                                            </li>
+                                        {% elseif app.user.roles.0 == 'admin' %}
+                                            <li role="nav">
+                                                <a href="/staff/messages/"><i class="fa fa-envelope"></i>&nbsp;Messages</a>
+                                            </li>
+                                        {% endif %}
+                                        <li role="nav" class="is-active">
+                                            <a><i class="fa fa-plus"></i>&nbsp;New</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(threadForm) }}
+                                {{  form_errors(threadForm) }}
+                                <div class="field">
+                                    <label for="pass" class="label"><label class="form-label required" for="login_username">To User</label></label>
+                                    <div class="control">
+                                        {{ form_widget(threadForm.to) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="pass" class="label"><label class="form-label required" for="login_username">Subject</label></label>
+                                    <div class="control">
+                                        {{ form_widget(threadForm.subject) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="pass" class="label"><label class="form-label required" for="login_username">Message</label></label>
+                                    <div class="control">
+                                        {{ form_widget(threadForm.message) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="login_security">Security Challenge</label>
+                                    <div class="control">
+                                        <img src="/img/captcha3/">
+                                        <p style="font-size:12px;color:#396e9a;"><i class="fa fa-exclamation-triangle"></i> Please make absolutely sure the URL inside the security image matches the one in your browser! If they do not match, leave this site immediately.</p>
+                                        <input type="text" autocomplete="off" id="login_security" name="_captcha" required="required" class="input is-medium" placeholder="enter text above" />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(threadForm.send) }}
+                                    </div>
+                                </div>
+                                {% for flashMessage in app.session.flashbag.get('captchaError') %}
+                                    <br/>
+                                    <div class="notification is-danger">
+                                        {{ flashMessage }}
+                                    </div>
+                                {% endfor %}
+                                {{ form_end(threadForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - New Listing{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                {% include '/dashboard/vendor/listing/handle/tabs.html.twig' %}
+                            </div>
+                            {% if disabled %}
+                                <div class="column is-full">
+                                    <div class="message is-danger">
+                                        <article class="message-body">Please make sure you have a PGP key, shipping options, and a Bitcoin, Monero, or Zcash address.</article>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="column is-full">
+                                    {{ form_start(form) }}
+                                    {% for flashMessage in app.session.flashbag.get('listingError') %}
+                                        <br/>
+                                        <div class="message is-danger">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    {% for flashMessage in app.session.flashbag.get('listingSuccess') %}
+                                        <br/>
+                                        <div class="message is-success">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="field">
+                                        <label class="label">Category</label>
+                                        <div class="select">
+                                            {{ form_widget(form.category) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Type</label>
+                                        <div class="select">
+                                            {{ form_widget(form.type) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            {{ form_row(form.next) }}
+                                        </div>
+                                    </div>
+                                    {{ form_end(form) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

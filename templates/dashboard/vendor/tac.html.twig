@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - T&C{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/listings/"><i class="fa fa-list"></i>&nbsp;Listings</a></li>
+                                        <li role="nav" class="is-active"><a href="/listings/tac/"><i class="fa fa-gavel"></i>&nbsp;Terms and Conditions</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(tacForm) }}
+                                {{  form_errors(tacForm) }}
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_widget(tacForm.tac) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(tacForm.save) }}
+                                    </div>
+                                </div>
+                                {{ form_end(tacForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

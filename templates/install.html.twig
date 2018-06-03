@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Install{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-full"></div>
+            <div class="column is-4 is-offset-4">
+                <div class="column is-10 is-offset-1">
+                    <div class="content">
+                        <h3>Create Admin Account</h3>
+                        {{ form_start(form) }}
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                {{ form_widget(form.username) }}
+                                <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                {{ form_widget(form.password) }}
+                                <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control has-icons-left">
+                                {{ form_widget (form.pin) }}
+                                <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-user-secret"></i>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <b>PGP:</b>
+                            <div class="control">
+                                {{ form_widget(form.pgp) }}
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <b>Two Factor Auth:</b>
+                                {{ form_widget(form.tfa) }}
+                            </div>
+                        </div>
+                        {% if form_errors(form.username) %}
+                            <br />
+                            <div class="notification is-danger">
+                                Username taken or invalid.
+                            </div>
+                        {% endif %}
+                        {% if form_errors(form.pin) %}
+                            <br />
+                            <div class="notification is-danger">
+                                Invalid pin, must be between 3-6 numbers.
+                            </div>
+                        {% endif %}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

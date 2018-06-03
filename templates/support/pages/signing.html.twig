@@ -1,0 +1,71 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Signing{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Signing</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-full">
+                                <h3 id="finalize">How do I sign transactions and get my Bitcoins / How do I confirm my multisig-wallets?</h3>
+                                <div style="margin-left:10px;">
+                                    <p>
+                                        After an order was finalized by the buyer, you can release your Bitcoins from our escrow. You can either release the funds from only one order or from multiple orders (from one multisig wallet). Click the release funds button and sign the provided raw transaction with your prefered client.
+                                    </p>
+                                    <p>
+                                        We suggest using <a href="/exit?referer={{ app.request.uri }}&url=https://coinb.in">coinb.in</a>. It is available through Tor and it is based on javascript and you can even download it to your computer if you want to sign the transaction offline. All you need is the private key of the address you have used to create the multisignature address.
+                                        Step by step guides to sign transactions
+                                        Electrum
+                                    </p>
+                                    <p>
+                                        Unfortunately, Electrum is unable to sign our multisignature transactions. We suggest using coinb.in (can be run offline), which is just as secure.
+                                        coinb.in
+                                    </p>
+                                    <p>
+                                        It is not necessary to use a coinb.in wallet. You only need coinb.in to sign transactions.
+                                    </p>
+                                    <b>Coinb.in:</b>
+                                    <ol>
+                                        <li>On Cyfer's transaction forms the important thing is "Bitcoin Transaction to Sign". Copy the contents of this field</li>
+                                        <li>Have the private key (sometimes referred to as WIF key) ready (the one that starts with 'L' or 'K' or '5') that belongs to the public key that you have used to create the multisig-wallet on Cyfer</li>
+                                        <li>Go to coinb.in, click "Sign" in the top row. Now you should see 2 fields. One that says "private key" and one big field that has no caption.</li>
+                                        <li>Paste the transaction from (1) into the big field</li>
+                                        <li>Paste the private key from (2) into the field that says "private key"</li>
+                                        <li>Click submit. If you have used the right private key a new text field with a green background will pop up which says "signed transaction"</li>
+                                        <li>Copy the contents of this field and paste it on Cyfer in the last field that says "Signed transaction"</li>
+                                        <li>Submit the form and you are done.</li>
+                                    </ol>
+                                    <b>Bitcoin-QT / Bitcoin-Core</b>
+                                    <ol>
+                                        <li>If you want to use the Bitcoin core client, this procedure is a little different and more complex: First, open your console by clicking on Help > Debug > Console. You now have to "register" the multisig address with your client. To do that enter the following command: addmultisigaddress 2 '["02047fb81b818e7062f67becf3061cfd79eab5f0efed9f4643a3589a6765bedbff", "YOUR_PUBLIC_KEY"]'</li>
+                                        <li>Please replace YOUR_PUBLIC_KEY with the public key of your address. You only have to do this once per multisig-address, not for every transaction! The first public key is Cyfer's public key, which is used to create every multisig-address in the system.</li>
+                                        <li>(Optional) If you have created the address which you have used to create the multisig address in a different client, you also need to import your private key. To do that please enter the following command: importprivkey PRIVATE_KEY Please replace PRIVATE_KEY with the private key of your address.</li>
+                                        <li>Now you are ready to sign the raw transaction out of your escrow by entering the following command: signrawtransaction RAW_TRANSACTION Please replace RAW_TRANSACTION with the raw transaction.</li>
+                                        <li>Important: You might receive an error that says '"error" : "Script evaluated without error but finished with a false/empty top stack element"'. Don't worry. Your client still successfully signed the transaction. Copy the bit from the first 3 lines of the response where it says "hex": For example: { "hex" : "COPY_THIS", "complete" : false, "errors" : ... }</li>
+                                        <li>Now enter your signed transaction in the form on Cyfer and submit it and you are done.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

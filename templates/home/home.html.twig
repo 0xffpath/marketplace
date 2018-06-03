@@ -1,0 +1,235 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Home{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2 is-paddingless-top">
+                    {% include 'categories.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-marginless">
+                            <div class="column">
+                                <h2>Welcome to Cyfer</h2>
+                            </div>
+                        </div>
+                        <hr class="is-marginless"/>
+                        <div class="column">
+                            <p>Greetings,</p>
+                            <p>Cyfer is a privacy centered marketplace that supports Bitcoin, Monero, and Zcash. Consider reading the <a href="/support/">FAQs</a> before getting started!</p>
+                            <b>- Cyfer Team</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid is-multiline">
+        <div class="columns">
+            <div class="column is-one-fifth">
+                <div class="column is-10 is-offset-2">
+                    <div class="panel" id="homevendors">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Top Vendors
+                            </h3>
+                        </div>
+                        {% for vendor in topVendors %}
+                            <a class="panel-block" href="/profile/{{ vendor.username }}/">
+                                <div>
+                                    {{ vendor.username }} [<span style="color:green;">+{{ vendor.positive }}</span>|<span style="color:red;">{{ vendor.negative }}</span>]
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="panel" id="homevendors">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                New Vendors
+                            </h3>
+                        </div>
+                        {% for vendor in recentVendors %}
+                            <a class="panel-block" href="/profile/{{ vendor.username }}/">
+                                <div>
+                                    {{ vendor.username }}
+                                    [<span style="color:green;">+{{ vendor.positive }}</span>|<span style="color:red;">{{ vendor.negative }}</span>]
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <br />
+                <div class="column is-10">
+                    <div class="content">
+                        <h3>Hot Products</h3>
+                        <div class="columns is-multiline">
+                            {% for listing in hotProducts %}
+                                <div class="column is-one-third">
+                                    <a href="/l/{{ listing.uuid }}/" title="{{ listing.title }}" style="color:inherit;">
+                                        <div class="card card-flex">
+                                            <div class="card-content listing-image">
+                                                <div class="media">
+                                                    <figure class="image">
+                                                        <img src="/uploads/images/{{ listing.image }}">
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="card-content is-paddingless-top">
+                                                <div class="columns is-multiline" style="align-content:flex-end;">
+                                                    <div class="column is-full">
+                                                        <span class="title is-6">{{ listing.title }}</span>
+                                                        {% if listing.rating is not null %}
+                                                            <span class="is-6 is-pulled-right">{{ listing.rating }}%</span>
+                                                        {% else %}
+                                                            <span class="is-6 is-pulled-right"><i class="fa fa-leaf"></i></span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer card-footer-flex">
+                                                <div class="card-footer-item">
+                                                    {% set price = listing.price - listing.discount %}
+                                                    {% if listing.discount == 0 %}
+                                                        {{ listing.price }} {{ listing.fiat }}
+                                                    {% else %}
+                                                        <s>{{ listing.price }}</s>&nbsp;{{ price }}&nbsp;{{ listing.fiat }}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="card-footer-item">
+                                                    {% if listing.btc %}<i class="cc BTC"></i>&nbsp;{% endif %}
+                                                    {% if listing.xmr %}<i class="cc XMR"></i>&nbsp;{% endif %}
+                                                    {% if listing.zec %}<i class="cc ZEC"></i>&nbsp;{% endif %}
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="column is-10">
+                    <div class="content">
+                        <h3>Staff Picks</h3>
+                        <div class="columns is-multiline">
+                            {% for listing in staffPicks %}
+                                <div class="column is-one-third">
+                                    <a href="/l/{{ listing.uuid }}/" title="{{ listing.title }}" style="color:inherit;">
+                                        <div class="card card-flex">
+                                            <div class="card-content listing-image">
+                                                <div class="media">
+                                                    <figure class="image">
+                                                        <img src="/uploads/images/{{ listing.image }}">
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="card-content is-paddingless-top">
+                                                <div class="columns is-multiline" style="align-content:flex-end;">
+                                                    <div class="column is-full">
+                                                        <span class="title is-6">{{ listing.title[:35] }}{{ listing.title|length > 35 ? '...' }}</span>
+                                                        {% if listing.rating is not null %}
+                                                            <span class="is-6 is-pulled-right">{{ listing.rating }}%</span>
+                                                        {% else %}
+                                                            <span class="is-6 is-pulled-right"><i class="fa fa-leaf"></i></span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer card-footer-flex">
+                                                <div class="card-footer-item">
+                                                    {% set price = listing.price - listing.discount %}
+                                                    {% if listing.discount == 0 %}
+                                                        {{ listing.price }} {{ listing.fiat }}
+                                                    {% else %}
+                                                        <s>{{ listing.price }}</s>&nbsp;{{ price }}&nbsp;{{ listing.fiat }}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="card-footer-item">
+                                                    {% if listing.btc %}<i class="cc BTC"></i>&nbsp;{% endif %}
+                                                    {% if listing.xmr %}<i class="cc XMR"></i>&nbsp;{% endif %}
+                                                    {% if listing.zec %}<i class="cc ZEC"></i>&nbsp;{% endif %}
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <br />
+                <div class="column is-10">
+                    <div class="content">
+                        <h3>New Products</h3>
+                        {% set count = 1 %}
+                        <div class="columns is-multiline">
+                            {% for listing in newProducts %}
+                                <div class="column is-one-third">
+                                    <a href="/l/{{ listing.uuid }}/" title="{{ listing.title }}" style="color:inherit;">
+                                        <div class="card card-flex">
+                                            <div class="card-content listing-image">
+                                                <div class="media">
+                                                    <figure class="image">
+                                                        <img src="/uploads/images/{{ listing.image }}">
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="card-content is-paddingless-top">
+                                                <div class="columns is-multiline" style="align-content:flex-end;">
+                                                    <div class="column is-full">
+                                                        <span class="title is-6">{{ listing.title }}</span>
+                                                        {% if listing.rating is not null %}
+                                                            <span class="is-6 is-pulled-right">{{ listing.rating }}%</span>
+                                                        {% else %}
+                                                            <span class="is-6 is-pulled-right"><i class="fa fa-leaf"></i></span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <footer class="card-footer card-footer-flex">
+                                                <div class="card-footer-item">
+                                                    {% set price = listing.price - listing.discount %}
+                                                    {% if listing.discount == 0 %}
+                                                        {{ listing.price }} {{ listing.fiat }}
+                                                    {% else %}
+                                                        <s>{{ listing.price }}</s>&nbsp;{{ price }}&nbsp;{{ listing.fiat }}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="card-footer-item">
+                                                    {% if listing.btc %}<i class="cc BTC"></i>&nbsp;{% endif %}
+                                                    {% if listing.xmr %}<i class="cc XMR"></i>&nbsp;{% endif %}
+                                                    {% if listing.zec %}<i class="cc ZEC"></i>&nbsp;{% endif %}
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

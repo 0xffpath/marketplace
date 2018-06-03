@@ -1,0 +1,503 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Order #{{ order.id }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        {% if app.user.roles.0 == 'admin' %}
+                                            <li role="nav">
+                                                <a href="/staff/disputes/"><i class="fa fa-shopping-cart"></i>&nbsp;Disputes</a>
+                                            </li>
+                                        {% else %}
+                                            <li role="nav">
+                                                <a href="/orders/"><i class="fa fa-shopping-cart"></i>&nbsp;Orders</a>
+                                            </li>
+                                        {% endif %}
+                                        <li class="is-active">
+                                            <a>{{ order.amount }} x {{ order.title }}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                            <tr>
+                                                <td width="20%">
+                                                    Shipping Type:
+                                                </td>
+                                                <td width="80%">
+                                                    {% if order.shippingType == 'physical' %}
+                                                        Physical Delivery
+                                                    {% elseif order.shippingType == 'digital' %}
+                                                        Digital Delivery
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Delivery:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.shippingOption }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Multisignature:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.multisig }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Address:
+                                                </td>
+                                                <td width="80%">
+                                                    <code>{{ order.address }}</code>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Cryptocurrency:
+                                                </td>
+                                                <td width="80%">
+                                                    {% if order.crypto == 'btc' %}
+                                                        Bitcoin
+                                                    {% elseif order.crypto == 'xmr' %}
+                                                        Monero
+                                                    {% elseif order.crypto == 'zec' %}
+                                                        Zcash
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Start Date:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.startDate|date("F j, Y, g:i a") }} UTC
+                                                </td>
+                                            </tr>
+                                            {% if order.status == 'shipped' %}
+                                                <tr>
+                                                    <td width="20%">
+                                                        Shipped Date:
+                                                    </td>
+                                                    <td width="80%">
+                                                        {{ order.shippedDate|date("F j, Y, g:i a") }} UTC
+                                                    </td>
+                                                </tr>
+                                                {% if order.autoDate != null %}
+                                                    <tr>
+                                                        <td width="20%">
+                                                            Auto Finalize:
+                                                        </td>
+                                                        <td width="80%">
+                                                            {{ order.autoDate|date("F j, Y, g:i a") }} UTC <a href="/order/extend/{{ order.uuid }}/" class="tag is-warning"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Extend to 3 days</a><br />
+                                                            <small class="text-muted">In {{ timeLeft.days }}d {{ timeLeft.minutes }}m</small><br />
+                                                            <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: If you do not receive your order before the timer runs out, please either dispute the order or click the "Extend" button above.</small>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% elseif order.status == 'rejected' %}
+                                                <tr>
+                                                    <td width="20%">
+                                                        Refund:
+                                                    </td>
+                                                    <td width="80%">
+                                                        <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: The order was rejected by the vendor. If you have not recieved your money back, <a href="/support">contact support</a> with your order id: <code>{{ order.id }}</code></small>
+                                                    </td>
+                                                </tr>
+                                            {% elseif order.status == 'auto' or order.status == 'finalized' %}
+                                                <tr>
+                                                    <td width="20%">
+                                                        Shipped Date:
+                                                    </td>
+                                                    <td width="80%">
+                                                        {{ order.shippedDate|date("F j, Y, g:i a") }} UTC
+                                                    </td>
+                                                </tr>
+                                                {% if order.status == 'auto' %}
+                                                    <tr>
+                                                        <td width="20%">
+                                                            Auto Finalized:
+                                                        </td>
+                                                        <td width="80%">
+                                                            <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: The order <code>{{ order.id }}</code> has been auto finalized. It was finalized at {{ order.autoDate|date("F j, Y, g:i a") }} UTC.</small>
+                                                        </td>
+                                                    </tr>
+                                                {% else %}
+                                                    <tr>
+                                                        <td width="20%">
+                                                            Finalized:
+                                                        </td>
+                                                        <td width="80%">
+                                                            <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: The order <code>#{{ order.id }} - {{ order.title }}</code> has been finalized. It was finalized at {{ order.autoDate|date("F j, Y, g:i a") }} UTC.</small>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% if order.status == 'finalized' and order.buyer == app.user.username %}
+                                    {% if order.reviewed and edit != 'true' %}
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <i class="fa fa-comments" aria-hidden="true"></i> Review
+                                                <a href="?edit=true" class="pull-right button is-small is-warning"><i class="fa fa-edit"></i> Edit</a>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="column is-10">
+                                                        <div class="form-group row">
+                                                            <label class="label is-inline-block" for="rating">Rating of product/vendor:</label>
+                                                            {% if feedback.feedback == 'Positive' %}
+                                                                <div class="tag is-success">Positive</div>
+                                                            {% elseif feedback.feedback == 'Neutral' %}
+                                                                <div class="tag">Neutral</div>
+                                                            {% elseif feedback.feedback == 'Negative' %}
+                                                                <div class="tag is-danger">Negative</div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-12">
+                                                                <label class="label" for="message">Feedback <small>(optional)</small></label>
+                                                                <textarea class="textarea" disabled="disabled">{{ feedback.comment }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <hr />
+                                        <div class="subtitle">
+                                            <i class="fa fa-comments" aria-hidden="true"></i> Review
+                                            {{ edit == 'true' ? '<a href="?edit=false" class="ispulled-right button is-small is-warning"><i class="fa fa-edit"></i> Exit Edit</a>'}}
+                                        </div>
+                                        {{ form_start(reviewForm) }}
+                                        {{ form_errors(reviewForm) }}
+                                        <div class="field">
+                                            <div class="select">
+                                                {{ form_widget(reviewForm.feedback) }}
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="control">
+                                                {{ form_widget(reviewForm.comment) }}
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="control">
+                                                {{ form_row(reviewForm.submit) }}
+                                            </div>
+                                        </div>
+                                        {{ form_end(reviewForm) }}
+                                    {% endif %}
+                                {% else %}
+                                    {% if order.status == 'disputed' %}
+                                        <div class="message is-warning">
+                                            <div class="message-body">Please write why you have disputed the order.</div>
+                                        </div>
+                                        <hr class="hr-md is-fullwidth" />
+                                    {% endif %}
+                                    <div class="column">
+                                        {% include '/dashboard/shared/message.html.twig' %}
+                                    </div>
+                                    {% if order.status != 'finalized' %}
+                                        <hr class="hr-md is-fullwidth" />
+                                        {{ form_start(messageForm) }}
+                                        {{ form_errors(messageForm) }}
+                                        <div class="field">
+                                            <div class="control">
+                                                {{ form_widget(messageForm.message) }}
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="control">
+                                                {{ form_row(messageForm.submit) }}
+                                            </div>
+                                        </div>
+                                        {{ form_end(messageForm) }}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="column is-4">
+                                {% if order.status == 'shipped' or order.status == 'accepted' %}
+                                    {% if app.user.roles.0 == 'buyer' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-success is-large is-block" href="/order/finalize/{{ order.uuid }}/"><i class="fa fa-check" aria-hidden="true"></i> Finalize</a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href="/order/dispute/{{ order.uuid }}/"><i class="fa fa-gavel" aria-hidden="true"></i> Dispute</a>
+                                            </div>
+                                        </div>
+                                    {% elseif app.user.roles.0 == 'vendor' and order.status == 'accepted' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-success is-large is-block" href="/order/ship/{{ order.uuid }}/"><i class="fa fa-truck" aria-hidden="true"></i> Mark Shipped</a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href="/order/cancel/{{ order.uuid }}/"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>
+                                            </div>
+                                        </div>
+                                    {% elseif app.user.roles.0 == 'vendor' and order.status == 'shipped' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href="/order/cancel/{{ order.uuid }}/"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% elseif order.status == 'rejected' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="button is-danger is-large is-block" href=""><i class="fa fa-thumbs-down" aria-hidden="true"></i> Rejected</a>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'waiting' and app.user.roles.0 == 'buyer' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="button is-success is-large is-block" href="/pay/{{ order.uuid }}/"><i class="fa fa-money" aria-hidden="true"></i> Pay</a>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'disputed' %}
+                                    {% if app.user.roles.0 == 'buyer' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href=""><i class="fa fa-gavel" aria-hidden="true"></i> Disputed</a>
+                                            </div>
+                                        </div>
+                                    {% elseif app.user.roles.0 == 'vendor' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href=""><i class="fa fa-gavel" aria-hidden="true"></i> Disputed</a>
+                                            </div>
+                                        </div>
+                                    {% elseif app.user.roles.0 == 'admin' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href="/staff/dispute/vendor/{{ order.uuid }}/"><i class="fa fa-magic" aria-hidden="true"></i> Release Money to Vendor</a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-success is-large is-block" href="/staff/dispute/buyer/{{ order.uuid }}/"><i class="fa fa-magnet" aria-hidden="true"></i> Release Money to Buyer</a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% elseif order.status == 'auto' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="button is-secondary is-large is-block" href=""><i class="fa fa-clock-o" aria-hidden="true"></i> Auto Finalized</a>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'finalized' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="button is-default is-large is-block" href=""><i class="fa fa-clock-o" aria-hidden="true"></i> Finalized</span>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'confirmation' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="button is-default is-large is-block" href=""><i class="fa fa-clock-o" aria-hidden="true"></i> Waiting for Blockchain</span>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'timeout' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="button is-danger is-large is-block" href=""><i class="fa fa-clock-o" aria-hidden="true"></i> Order Timed Out</span>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'vendor' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="button is-warning is-large is-block" href=""><i class="fa fa-money" aria-hidden="true"></i> Money Released to Vendor</span>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'buyer' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <span class="button is-warning is-large is-block" href=""><i class="fa fa-money" aria-hidden="true"></i> Money Released to Buyer</span>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'canceled' %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a class="button is-danger is-large is-block" href=""><i class="fa fa-times" aria-hidden="true"></i> Canceled</a>
+                                        </div>
+                                    </div>
+                                {% elseif order.status == 'pending' %}
+                                    {% if app.user.roles.0 == 'vendor' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-success is-large is-block" href="/order/accept/{{ order.uuid }}/"><i class="fa fa-check" aria-hidden="true"></i> Accept</a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="button is-danger is-large is-block" href="/order/reject/{{ order.uuid }}/"><i class="fa fa-times" aria-hidden="true"></i> Reject</a>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="button btn-primary is-large is-block"><i class="fa fa-clock-o" aria-hidden="true"></i> Pending</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                <br />
+                                <div class="columns is-multiline">
+                                    <div class="column is-full">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns is-multiline is-gapless">
+                                                    <div class="column is-full">
+                                                        <h3 class="mt-xxs">Your Order</h3>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Title:</b></small>
+                                                    </div>
+                                                    <div class="column is-half"  style="overflow:hidden;">
+                                                        <small class="tag">{{ order.amount }}<b>x {{ order.title }}</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Subtotal:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if order.crypto == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif order.crypto == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif order.crypto == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ order.cryptoPrice }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Shipping:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if order.crypto == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif order.crypto == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif order.crypto == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ order.shippingCryptoPrice }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Total:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if order.crypto == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif order.crypto == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif order.crypto == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ order.cryptoTotal }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <hr class="hr-sm" />
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Subtotal:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ order.fiat }} {{ order.price }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Shipping:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ order.fiat }} {{ order.shippingPrice }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Total:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ order.fiat }} {{ order.total }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column is-full">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns is-multiline is-gapless">
+                                                    <div class="column is-full">
+                                                        <h3><a href="/profile/{{ order.vendor }}/">{{ order.vendor }}</a></h3>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <p class="text-light-grey">Know your vendor!</p>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <small style="font-size:12px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Last Seen: {{ vendor.lastSeen|date("Y-m-d h:m") }} UTC</small>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        {% if vendor.totalFeedback != 0 %}
+                                                            {% set rating = ((vendor.positive+(vendor.neutral*0.6))/vendor.totalFeedback*100)|round ~ '%' %}
+                                                        {% else %}
+                                                            {% set rating = '-' %}
+                                                        {% endif %}
+                                                        <small style="font-size:12px;"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Feedback: <a href="/">{{ rating }}</a></small>                                            </div>
+                                                    <div class="column is-full">
+                                                        <small style="font-size:12px;"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Orders: {{ vendor.totalSell }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

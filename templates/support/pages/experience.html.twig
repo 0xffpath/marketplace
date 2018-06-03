@@ -1,0 +1,135 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Experience{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Experience</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <h2>What does XP do?</h2>
+                                <p>For vendors it determines what fee is paid on products sold. For buyers it lets vendors know how trustworthy a buyer is.</p>
+                            </div>
+                            <div class="column is-full">
+                                <h2>How to gain XP?</h2>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Amount XP</th>
+                                </tr>
+                                <tr>
+                                    <td>Finalized Order (no rating/neutral)</td>
+                                    <td>[price] X 10 = xp gained</td>
+                                </tr>
+                                <tr>
+                                    <td>Disputed order ruled against vendor (only vendor)</td>
+                                    <td>[price] X 15 = xp lost</td>
+                                </tr>
+                                <tr>
+                                    <td>Positive feedback</td>
+                                    <td>([price] X 15) = xp gained</td>
+                                </tr>
+                                <tr>
+                                    <td>Negative feedback</td>
+                                    <td>-([price] X 15) = xp lost</td>
+                                </tr>
+                                <tr>
+                                    <td>Referred user/vendor</td>
+                                    <td>[price] X 10 = xp gained</td>
+                                </tr>
+                                <tr>
+                                    <td>Adding email</td>
+                                    <td>+500xp</td>
+                                </tr>
+                                <tr>
+                                    <td>Adding Telegram</td>
+                                    <td>+500xp</td>
+                                </tr>
+                                <tr>
+                                    <td>Adding Whatsapp</td>
+                                    <td>+500xp</td>
+                                </tr>
+                                <tr>
+                                    <td>Adding PGP</td>
+                                    <td>+500</td>
+                                </tr>
+                            </table>
+                            <div class="column is-full">
+                                <h2>Level System</h2>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>XP needed</th>
+                                    <th>Vendor fee per order</th>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-warning">level 1</span></td>
+                                    <td>0</td>
+                                    <td>1% up to $7</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-primary">level 2</span></td>
+                                    <td>4000</td>
+                                    <td>0.9% up to $7</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-link">level 3</span></td>
+                                    <td>9000</td>
+                                    <td>0.8% up to $7</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-level-4">level 4</span></td>
+                                    <td>16000</td>
+                                    <td>0.7% up to $7</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-danger">level 5</span></td>
+                                    <td>25000</td>
+                                    <td>0.6% up to $7</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-level-6">level 6</span></td>
+                                    <td>36000</td>
+                                    <td>0.5% up to $5</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-level-7">level 7</span></td>
+                                    <td>49000</td>
+                                    <td>0.4% up to $5</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-level-8">level 8</span></td>
+                                    <td>64000</td>
+                                    <td>0.3% up to $5</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="tag is-level-9">level 9</span></td>
+                                    <td>81000</td>
+                                    <td>0.2% up to $5</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

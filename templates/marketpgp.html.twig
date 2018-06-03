@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Support{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-three-fifths is-offset-one-fifth">
+                <div class="content">
+                    <h2>Cyfer PGP key</h2>
+                    <textarea rows="30" readonly class="textarea">{{ pgp }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

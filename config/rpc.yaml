@@ -1,0 +1,24 @@
+config:
+    # to use ssl, set ssl_path to absolute path of cert and make 'ssl: true'
+    # example to add: ssl_path: /full/path/to/mycertificate.cert
+    bitcoin:
+        ssl: false
+        username:
+        password:
+        host:
+        port:
+        ssl_path: null
+    monero:
+        ssl: false
+        username:
+        password:
+        host:
+        port:
+        ssl_path: null
+    zcash:
+        ssl: false
+        username:
+        password:
+        host:
+        port:
+        ssl_path: null

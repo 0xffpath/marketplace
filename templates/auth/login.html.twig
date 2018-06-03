@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Login{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-full"></div>
+            <div class="column is-4 is-offset-4">
+                <div class="column is-10 is-offset-1">
+                    <div class="content">
+                        <h3>Login</h3>
+                        <form {{ path('login') }} method="post" id="login">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input type="text" id="login_username" name="_username" required="required" value="{{ last_username }}" class="input is-medium" placeholder="username" autocomplete="off" />
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input type="password" id="login_password" name="_password" required="required" class="input is-medium" placeholder="password" />
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            {% if twoFactor %}
+                                    <div class="field">
+                                        <div class="control">
+                                            <label for="auto" class="label">Please Decrypt</label>
+                                            <textarea class="textarea" type="text">{{ cypher }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <label for="auto" class="label">Answer:</label>
+                                            <input type="text" autocomplete="off" class="input" form="login" name="_tfa" required/>
+                                        </div>
+                                    </div>
+                            {% endif %}
+                            <div class="field">
+                                <div class="control">
+                                    <label class="label" for="login_auto">Auto logout (minutes)</label>
+                                    <input type="number" id="login_auto" name="_auto" required="required" class="input is-medium" placeholder="auto logout" min="1" max="360" value="60" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="login_security">Security Challenge</label>
+                                <div class="control">
+                                    <img src="/img/captcha3/">
+                                    <p style="font-size:12px;color:#396e9a;"><i class="fa fa-exclamation-triangle"></i> Please make absolutely sure the URL inside the security image matches the one in your browser! If they do not match, leave this site immediately.</p>
+                                    <input type="text" autocomplete="off" id="login_security" name="_captcha" required="required" class="input is-medium" placeholder="enter text above" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-success">Login</button>
+                                    {% if twoFactor %}
+                                        <a href="{{ path('login') }}" class="button is-danger">Exit 2FA</a>
+
+                                    {% else %}
+                                        <a href="{{ path('twofactor') }}" class="button">2FA Login</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                        {% if error %}
+                            <br />
+                            <div class="notification is-danger">
+                                {{ error.messageKey }}
+                            </div>
+                        {% endif %}
+                        {% if app.request.get('error') == 'tfa' %}
+                            <br />
+                            <div class="notification is-danger">
+                                Two factor authentication is not enabled.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

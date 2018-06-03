@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - New Vendor{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a href=""><i class="fa fa-info-circle"></i>&nbsp;New Vendor</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                    <h3>Rules:</h3>
+                                    <ul>
+                                        <li>No pornography of any kind.</li>
+                                        <li>Do not break the law, or take action that results in Cyfer breaking the law.</li>
+                                        <li>Provide a short, accurate name for listings.</li>
+                                        <li>Promptly dispose of user information (addresses, orders, etc) after a sale has been finalized.</li>
+                                        <li>Listings must be in English, or have an additional English section.</li>
+                                    </ul>
+                                <div class="column is-full">
+                                    <h3>Info:</h3>
+                                    <ul>
+                                        <li>A bond of 75 USD is required to join to prevent you from exiting scamming.</li>
+                                        <li>After 100 successful trades, with a rating of 4.5 or above, you will be considered a trusted vendor and you will get your cryptocurrency back.</li>
+                                    </ul>
+                                </div>
+                                <div class="column is-full">
+                                    <h3>Add PGP: <small>(required)</small></h3>
+                                    {{ form_start(pgpForm) }}
+                                    {{  form_errors(pgpForm) }}
+                                    <div class="field">
+                                        <div class="control">
+                                            {{ form_widget(pgpForm.pgp) }}
+                                        </div>
+                                    </div>
+                                    <div class="field" style="display:none;">
+                                        <div class="control">
+                                            <b>Two Factor Auth:</b>
+                                            {{ form_widget(pgpForm.tfa) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            {{ form_row(pgpForm.save) }}
+                                        </div>
+                                    </div>
+                                    {% for flashMessage in app.session.flashbag.get('pgpError') %}
+                                        <br/>
+                                        <div class="message is-danger">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    {% for flashMessage in app.session.flashbag.get('pgpSuccess') %}
+                                        <br/>
+                                        <div class="message is-danger">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="field">
+                                        <div class="control">
+                                            <p style="color:red;">After You click "Save" you will be logged out on success.</p>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            {{ form_end(pgpForm) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Use cryptocurrency{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Use cryptocurrency</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="message is-danger">
+                                    <div class="message-body">
+                                        Use at your own risk. We are not affiliated with any of these services and can't vouch for them.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <h2>Exchange cryptocurrency</h2>
+                                <p>You can exchange government backed fiat for cryptocurrency on one of the exchanges.</p>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Link</th>
+                                    <th>Notes</th>
+                                </tr>
+                                <tr>
+                                    <td>CoinBase</td>
+                                    <td><a href="/exit?url=https://coinbase.com/&referer=/support/crypto/">https://coinbase.com/</a></td>
+                                    <td>1.25% fee, KYC rules (must show ID). Bitcoin</td>
+                                </tr>
+                                <tr>
+                                    <td>Paxful</td>
+                                    <td><a href="/exit?url=https://paxful.com/&referer=/support/crypto/">https://paxful.com/</a></td>
+                                    <td>5-20% fee, no KYC rules, no bank account needed. Bitcoin</td>
+                                </tr>
+                                <tr>
+                                    <td>Localbitcoins</td>
+                                    <td><a href="/exit?url=https://localbitcoins.com/&referer=/support/crypto/">https://localbitcoins.com/</a></td>
+                                    <td>5-20% fee, no KYC rules, no bank account needed. Bitcoin</td>
+                                </tr>
+                                <tr>
+                                    <td>Localmonero</td>
+                                    <td><a href="/exit?url=https://localmonero.co/&referer=/support/crypto/">https://localmonero.co/</a></td>
+                                    <td>5-20% fee, no KYC rules, no bank account needed. Monero</td>
+                                </tr>
+                                <tr>
+                                    <td>Binance</td>
+                                    <td><a href="/exit?url=https://localmonero.co/&referer=/support/crypto/">https://www.binance.com/</a></td>
+                                    <td>0.1% fee, KYC rules. Bitcoin</td>
+                                </tr>
+                            </table>
+                            <div class="column is-full">
+                                <h2>Convert cryptocurrency</h2>
+                                <p>If you already have cryptocurrency, you can convert it to another one.</p>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Link</th>
+                                    <th>Notes</th>
+                                </tr>
+                                <tr>
+                                    <td>CoinBase</td>
+                                    <td><a href="/exit?url=https://shapeshift.io/&referer=/support/crypto/">https://shapeshift.io/</a></td>
+                                    <td>Fee varies, convert Bitcoin, Monero, Zcash with each other.</td>
+                                </tr>
+                            </table>
+                            <div class="column is-full">
+                                <h2>tumble cryptocurrency (Bitcoin)</h2>
+                                <p>Makes it difficult for your Bitcoin to be linked to you.</p>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Link</th>
+                                    <th>Notes</th>
+                                </tr>
+                                <tr>
+                                    <td>CoinMixer</td>
+                                    <td><a href="/exit?url=https://bitmixer.se/&referer=/support/crypto/">https://coinmixer.se/</a> (<a href="/exit?url=http://coinmixibh45abn7.onion&referer=/support/crypto/">http://coinmixibh45abn7.onion</a>)</td>
+                                    <td>1-3% fee</td>
+                                </tr>
+                                <tr>
+                                    <td>BitBlender</td>
+                                    <td><a href="/exit?url=http://bitblendervrfkzr.onion/&referer=/support/crypto/">http://bitblendervrfkzr.onion/</a></td>
+                                    <td>1-3% fee</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,252 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - {{ listing.title }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            {% if listing.flag == true %}
+                <div class="column is-8 is-offset-2">
+                    <div class="message is-danger">
+                        <article class="message-body">
+                            This item is currently unavailable.
+                        </article>
+                    </div>
+                </div>
+            {% else %}
+                <div class="column is-10 is-offset-2">
+                    <div class="columns">
+                        <div class="column is-3">
+                            <div class="thumbnail">
+                                <img style="min-height:190px;max-height:350px;" src="/uploads/images/{{ listing_images.getImage(listing.uuid, offset) }}">
+                            </div>
+                            <nav class="pagination is-rounded is-block">
+                                {% set offsetForward = offset+1 %}
+                                {% set offsetBackward = offset-1 %}
+                                {% if offset > 0 %}
+                                    <a class="pagination-previous is-pulled-left" href="?offset={{ offsetBackward }}">&larr;&nbsp;<i class="fa fa-image"></i></a>
+                                {% endif %}
+                                {% if offset < count-1 %}
+                                    <a class="pagination-next is-pulled-right" href="?offset={{ offsetForward }}">&rarr;&nbsp;<i class="fa fa-image"></i></a>
+                                {% endif %}
+                            </nav>
+                        </div>
+                        <div class="column is-9">
+                            <div class="columns">
+                                <div class="column is-6">
+                                    <div class="content">
+                                        <h3>{{ listing.title }}</h3>
+                                        {% set price = listing.price - listing.discount %}
+                                        {% if listing.discount == 0 %}
+                                            <h4 style="margin:0px;"><b>{{ listing.fiat }} {{ listing.price }}</b></h4>
+                                        {% else %}
+                                            <h4 style="margin:0px;"><b><s>{{ listing.price }}</s>&nbsp;{{ price }}&nbsp;{{ listing.fiat }}</b></h4>
+                                        {% endif %}
+                                        {% if listing.btc %}<p style="margin:0px;" class="text-light-grey"><i class="cc BTC"></i> {{ btcPrice[listing.fiat] * listing.price }}</p>{% endif %}
+                                        {% if listing.xmr %}<p style="margin:0px;" class="text-light-grey"><i class="cc XMR"></i> {{ xmrPrice[listing.fiat] * listing.price }}</p>{% endif %}
+                                        {% if listing.zec %}<p style="margin:0px;" class="text-light-grey"><i class="cc ZEC"></i> {{ zecPrice[listing.fiat] * listing.price }}</p>{% endif %}
+                                        <div class="columns is-marginless-bottom">
+                                            <div class="column is-2 is-paddingless-bottom">
+                                                Vendor
+                                            </div>
+                                            <div class="column is-10 is-paddingless-bottom">
+                                                <a href="/profile/{{ listing.username }}/">{{ listing.username }}</a>
+                                                [<span style="color:green;">+{{ profile.positive }}</span>|<span style="color:red;">{{ profile.negative }}</span>]
+                                                {% if profile.verified %}
+                                                    <span class="tag is-success"><i class="fa fa-star"></i>&nbsp;Verified</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="columns is-marginless-bottom">
+                                            <div class="column is-2 is-paddingless-bottom">
+                                                Class
+                                            </div>
+                                            <div class="column is-10 is-paddingless-bottom">
+                                                {{ listing.type }}
+                                            </div>
+                                        </div>
+                                        <div class="columns is-marginless-bottom">
+                                            <div class="column is-2 is-paddingless-bottom">
+                                                Status
+                                            </div>
+                                            <div class="column is-10 is-paddingless-bottom">
+                                                {% if listing.stock is null %}
+                                                    <span class="tag is-warning">In Stock (unlimited left)</span>
+                                                {% else %}
+                                                    <span class="tag is-warning">In Stock ({{ listing.stock }} left)</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="columns is-marginless-bottom">
+                                            <div class="column is-2 is-paddingless-bottom">
+                                                Rating
+                                            </div>
+                                            <div class="column is-10 is-paddingless-bottom">
+                                                {% if listing.rating %}
+                                                    <small>{{ listing.rating }}%</small>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="columns is-marginless-bottom is-multiline">
+                                            {% if subs|length >= 1 %}
+                                                {% for sub in subs %}
+                                                    <div class="column is-one-third">
+                                                        <a href="/l/{{ sub.listing.uuid }}">
+                                                            <div class="thumbnail {{ sub.listing.id == listing.id ? 'thumbnail-active' }}">
+                                                                <img title="{{ sub.listing.title }}" class="sub-product" src="/uploads/images/{{ sub.image }}"/>
+                                                                {% set price = sub.listing.price - sub.listing.discount %}
+                                                                <span class="sub-product">{{ price }} {{ sub.listing.fiat }}</span>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column is-6">
+                                    <div class="column is-8 is-offset-2">
+                                        <div class="column is-full is-paddingless-bottom">
+                                                <form action="/buy/{{ listing.uuid }}/" id="buy" method="GET">
+                                                    <div class="card">
+                                                        <div class="card-content">
+                                                            <div class="field">
+                                                                <div class="control">
+                                                                    <span style="display:inline-block;">
+                                                                        Quantity: <input value="1" required name="quantity" class="input is-small" style="width:20%;display:inline-block;" type="text"/>
+                                                                        {% if listing.btc %}
+                                                                            <input type="radio" name="currency" required value="btc"/> <i class="cc BTC"></i>
+                                                                        {% endif %}
+                                                                        {% if listing.xmr %}
+                                                                            <input type="radio" name="currency" required value="xmr"/> <i class="cc XMR"></i>
+                                                                        {% endif %}
+                                                                        {% if listing.zec %}
+                                                                            <input type="radio" name="currency" required value="zec"/> <i class="cc ZEC"></i>
+                                                                        {% endif %}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="field">
+                                                                <div class="control">
+                                                                    <div class="select is-fullwidth">
+                                                                        <select name="shipping">
+                                                                            {% for option in shipping %}
+                                                                                <option value="{{ option.id }}">{{ option.shippingOption }} ({{ option.price }} {{ option.fiat }})</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                    <br />
+                                                                </div>
+                                                            </div>
+                                                            <div class="field">
+                                                                <div class="control">
+                                                                    {% if listing.stock is null or listing.stock > 0 %}
+                                                                        <button form="buy" type="submit" class="button is-large is-fullwidth is-success">Buy Now</button>
+                                                                    {% else %}
+                                                                        <button type="button" class="button is-large is-fullwidth is-danger">Out of Stock</button>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                        </div>
+                                        <div class="column is-full is-paddingless-top">
+                                            <div class="column is-paddingless-left is-paddingless-right" role="group">
+                                                <div class="field is-grouped">
+                                                    {% if wishlist %}
+                                                        <div class="control">
+                                                            <a href="/wishlist/{{ listing.uuid }}/?return={{ url }}"  class="button"><i class="fa fa-minus"></i>&nbsp;Wishlist</a>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="control">
+                                                            <a href="/wishlist/{{ listing.uuid }}/?return={{ url }}" class="button"><i class="fa fa-plus"></i>&nbsp;Wishlist</a>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="control">
+                                                        <a href="/messages/new/?username={{ listing.username }}&subject={{ listing.title }}" class="button"><i class="fa fa-question-circle"></i>&nbsp;Question</a>
+                                                    </div>
+                                                    <div class="control">
+                                                        <a href="/report/{{ listing.uuid }}/" class="button"><i class="fa fa-flag"></i>&nbsp;Report</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-8 is-offset-2">
+                    {% set tab = app.request.get('tab') %}
+                    <div class="tabs">
+                        <ul>
+                            <li role="nav" class="{{ tab == 'details' or tab == '' ? 'is-active' : '' }}"><a href="/l/{{ listing.uuid }}/"><i class="fa fa-info-circle"></i>&nbsp;Details</a></li>
+                            <li role="nav" class="{{ tab == 'feedback' ? 'is-active' : '' }}"><a href="/l/{{ listing.uuid }}/?tab=feedback"><i class="fa fa-comment"></i>&nbsp;Feedback</a></li>
+                        </ul>
+                    </div>
+                    <div class="content">
+                        {% if tab == 'feedback' %}
+                            <h4>
+                                Product Feedback
+                            </h4>
+                            {% if feedback %}
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Rating</th>
+                                        <th>User</th>
+                                        <th>Comment</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for each in feedback %}
+                                        <tr>
+                                            <td>
+                                                {% if each.feedback == 'Positive' %}
+                                                    <div class="tag is-success">Positive</div>
+                                                {% elseif each.feedback == 'Neutral' %}
+                                                    <div class="tag is-default">Neutral</div>
+                                                {% elseif each.feedback == 'Negative' %}
+                                                    <div class="tag is-danger">Negative</div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ each.buyer[:1] }}{% for i in 0..(each.buyer|length - 2) %}*{% endfor %}{{ each.buyer[(each.buyer|length-1):] }}
+                                            </td>
+                                            <td>
+                                                {{ each.comment }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <i class="fa fa-star-half-o"></i> This item does not have any feedback yet.
+                            {% endif %}
+                        {% else %}
+                            <h4>
+                                Listing Details
+                            </h4>
+                            {% if listing.description %}
+                                {{ listing.description|nl2br }}
+                            {% else %}
+                                <i class="fa fa-book"></i> This product does not have any details.
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

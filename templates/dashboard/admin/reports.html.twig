@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Listings{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}" />
+{% endblock %}
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a><i class="fa fa-exclamation-triangle"></i>&nbsp;Reported Listings</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% if not listing %}
+                                <div class="column is-full">
+                                    <div class="message">
+                                        <div class="message-body">
+                                            <h2>No reported listings.</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <br />
+                                <div class="column is-full">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="card-header-title">
+                                                <a target="_blank" href="/product/{{ listing.id }}/">{{ listing.title }}</a>&nbsp;reported by&nbsp;<a href="/profile/{{ report.username }}/">{{ report.username }}</a>
+                                            </div>
+                                            <div class="card-header-title is-block">
+                                                {{ listing.type == 'physical' ? '<div class="tag is-primary is-pulled-right">physical</div>' : '<div class="tag is-primary is-pulled-right">digital</div>' }}
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="columns is-multiline">
+                                                <div class="column is-full">
+                                                    {{ report.offense }}
+                                                    <hr class="hr-sm">
+                                                </div>
+                                                <div class="column is-full">
+                                                    {{ listing.description|nl2br }}
+                                                </div>
+                                                <div class="column is-full">
+                                                    {% if listing.btc %}
+                                                        Bitcoin <i class="fa fa-check"></i>
+                                                    {% else %}
+                                                        Bitcoin <i class="fa fa-close"></i>
+                                                    {% endif %}
+
+                                                    {% if listing.xmr %}
+                                                        Monero <i class="fa fa-check"></i>
+                                                    {% else %}
+                                                        Monero <i class="fa fa-close"></i>
+                                                    {% endif %}
+
+                                                    {% if listing.zec %}
+                                                        Zcash <i class="fa fa-check"></i>
+                                                    {% else %}
+                                                        Zcash <i class="fa fa-close"></i>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="column is-full">
+                                                    {{ listing.price }} {{ listing.fiat }}
+                                                </div>
+                                            </div>
+                                            {{ form_start(moderateForm) }}
+                                            {{  form_errors(moderateForm) }}
+                                            <div class="field">
+                                                <label for="reason" class="label">Reason to Accept Report</label>
+                                                <div class="control">
+                                                    {{ form_widget(moderateForm.reason) }}
+                                                </div>
+                                            </div>
+                                            <div class="field is-grouped">
+                                                <div class="control">
+                                                    {{ form_row(moderateForm.accept) }}
+                                                </div>
+                                                <div class="control">
+                                                    <a class="button" href="/staff/report/reject/{{ report.id }}/">Reject</a>
+                                                </div>
+                                                <div class="control">
+                                                    <a class="button is-danger" href="/staff/report/reject/{{ report.id }}/">Delete</a>
+                                                </div>
+                                            </div>
+                                            {{ form_end(moderateForm) }}
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="card-footer-item">
+                                                Accept = Delist and accept report
+                                            </div>
+                                            <div class="card-footer-item">
+                                                Reject = Listing is fine, don't do anything
+                                            </div>
+                                            <div class="card-footer-item">
+                                                Delete = Delete listing and notify vendor
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

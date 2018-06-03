@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Profile{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        {% set tab = app.request.get('tab') %}
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a href=""><i class="fa fa-info-circle"></i>&nbsp;Profile</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(profileForm) }}
+                                {{  form_errors(profileForm) }}
+                                <div class="field">
+                                    <label class="label">Profile Picture</label>
+                                    <div class="control">
+                                        {{ form_widget(profileForm.image) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_widget(profileForm.profile) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(profileForm.save) }}
+                                    </div>
+                                </div>
+                                {% for flashMessage in app.session.flashbag.get('profileError') %}
+                                    <br/>
+                                    <div class="message is-danger">
+                                        <article class="message-body">{{ flashMessage }}</article>
+                                    </div>
+                                {% endfor %}
+                                {% for flashMessage in app.session.flashbag.get('profileSuccess') %}
+                                    <br/>
+                                    <div class="message is-success">
+                                        <article class="message-body">{{ flashMessage }}</article>
+                                    </div>
+                                {% endfor %}
+                                {{ form_end(profileForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Finalization{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Finalizing orders</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-full">
+                                <h3 id="finalize">Finalizing orders or signing off on Refunds.</h3>
+                                <p><b>Finalize Steps:</b></p>
+                                <ol>
+                                    <li>Press the finalize button on the orders page.</li>
+                                </ol>
+                                <p><b>Refund Steps:</b></p>
+                                <div style="margin-left:10px;">
+                                    <b>Bitcoin:</b>
+                                    <ol>
+                                        <li>Grab the multi-sig transaction the market provides you and paste it into the "Sign"
+                                            field on Coinbin.
+                                        </li>
+                                        <li>Right click on the matching multi-sig address from Electrum, copy the private key
+                                            and hit "Submit". Paste he result back to the market.
+                                        </li>
+                                    </ol>
+                                    <b>Monero:</b>
+                                    <ol>
+                                        <li>Click the refund button and the funds will be deposited into your wallet.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

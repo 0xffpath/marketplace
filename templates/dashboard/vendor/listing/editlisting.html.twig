@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Edit Listing{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/listings/"><i class="fa fa-list"></i>&nbsp;Listings</a></li>
+                                        <li role="nav" class="is-active"><a href="/listings/new/"><i class="fa fa-edit"></i>&nbsp;Edit Listing</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% if not disabled %}
+                                <div class="column is-full">
+                                    {% if report %}
+                                        <div class="message is-danger">
+                                            <article class="message-body">
+                                                <b>This listing has been flagged: </b>{{ report }}
+                                            </article>
+                                        </div>
+                                    {% endif %}
+                                    {{ form_start(listingForm) }}
+                                    {{  form_errors(listingForm) }}
+                                    <div class="field">
+                                        <label class="label">Title</label>
+                                        <div class="control">
+                                            {{ form_widget(listingForm.title) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Image <small class="text-light-grey">(only png, jpg, jpeg and must have >1. To add an image, select file then click save at bottom.)</small></label>
+                                        <div class="control">
+                                            {{ form_widget(listingForm.image) }}
+                                        </div>
+                                        <p class="is-marginless-bottom">Click to delete.</p>
+                                        {% for image in listing_images.getImages(id) %}
+                                            <div class="image">
+                                                <a href="/image/remove/{{ id }}/{{ image.id }}/?return={{ url }}">
+                                                    <img style="margin-top:2px;max-height:90px;max-width:90px;" src="/uploads/images/{{ image.image }}"/>
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Type</label>
+                                        <div class="select">
+                                            {{ form_widget(listingForm.type) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Category</label>
+                                        <div class="select">
+                                            {{ form_widget(listingForm.category) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="col-sm-12">
+                                            <label>Does not ship to</label>
+                                            <p class="shippingIcon"><i class="fa fa-info-circle"></i></p>
+                                            <div class="message is-warning shipping">
+                                                <article class="message-body">
+                                                    Select which continents you do <b>not</b> want to ship to. If you want to ship to a continent, but not to certain countries,
+                                                    then do <b>not</b> select the continent but instead the specific countries in that continent that you don't want to ship to.
+                                                </article>
+                                            </div>
+                                            <div class="columns">
+                                                <div class="column is-one-third">
+                                                    <div class="field">
+                                                        <div class="select is-multiple is-fullwidth">
+                                                            {{ form_widget(listingForm.southAmericaAll) }} any of South America
+                                                            <small class="text-light-grey">(or exclude specific below)</small>
+                                                            {{ form_widget(listingForm.southAmerica) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-one-third">
+                                                    <div class="field">
+                                                        <div class="select is-multiple is-fullwidth">
+                                                            {{ form_widget(listingForm.asiaAll) }} any of Asia
+                                                            <small class="text-light-grey">(or exclude specific below)</small>
+                                                            {{ form_widget(listingForm.asia) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-one-third">
+                                                    <div class="field">
+                                                        <div class="select is-multiple is-fullwidth">
+                                                            {{ form_widget(listingForm.africaAll) }} any of Africa
+                                                            <small class="text-light-grey">(or exclude specific below)</small>
+                                                            {{ form_widget(listingForm.africa) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="columns">
+                                                <div class="column is-one-third">
+                                                    <div class="field">
+                                                        <div class="select is-multiple is-fullwidth">
+                                                            {{ form_widget(listingForm.australiaAll) }} any of Australia
+                                                            <small class="text-light-grey">(or exclude specific below)</small>
+                                                            {{ form_widget(listingForm.australia) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-one-third">
+                                                    <div class="field">
+                                                        <div class="select is-multiple is-fullwidth">
+                                                            {{ form_widget(listingForm.europeAll) }} any of Europe
+                                                            <small class="text-light-grey">(or exclude specific below)</small>
+                                                            {{ form_widget(listingForm.europe) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-one-third">
+                                                    <div class="field">
+                                                        <div class="select is-multiple is-fullwidth">
+                                                            {{ form_widget(listingForm.northAmericaAll) }} any of North America
+                                                            <small class="text-light-grey">(or exclude specific below)</small>
+                                                            {{ form_widget(listingForm.northAmerica) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Ships From</label>
+                                        <div class="select">
+                                            {{ form_widget(listingForm.from) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <label for="pass" class="label">Price {{ currency }}</label>
+                                            {{ form_widget(listingForm.price) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Shipping</label>
+                                        <div class="select is-multiple">
+                                            {{ form_widget(listingForm.shipping) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="{{ bitcoin ? '' : 'is-hidden' }}">
+                                                <label class="label">Bitcoin</label>
+                                                {{ form_widget(listingForm.btc) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="{{ monero ? '' : 'is-hidden' }}">
+                                                <label class="label">Monero</label>
+                                                {{ form_widget(listingForm.xmr) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <div class="{{ zcash ? '' : 'is-hidden' }}">
+                                                <label class="label">Zcash</label>
+                                                {{ form_widget(listingForm.zec) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Description</label>
+                                        <div class="control">
+                                            {{ form_widget(listingForm.description) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            {{ form_row(listingForm.save) }}
+                                        </div>
+                                    </div>
+                                    {% for flashMessage in app.session.flashbag.get('listingError') %}
+                                        <br/>
+                                        <div class="alert alert-danger text-center">
+                                            <span class="text-danger">{{ flashMessage }}</span>
+                                        </div>
+                                    {% endfor %}
+                                    {% for flashMessage in app.session.flashbag.get('listingSuccess') %}
+                                        <br/>
+                                        <div class="alert alert-success text-center">
+                                            <span class="text-success">{{ flashMessage }}</span>
+                                        </div>
+                                    {% endfor %}
+
+                                    {{ form_end(listingForm) }}
+                                </div>
+                            {% else %}
+                                <div class="column is-full">
+                                    <div class="message is-danger">
+                                        <article class="message-body">Please make sure you have a PGP key, shipping options, and a Bitcoin, Monero, or Zcash address.</article>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

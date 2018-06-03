@@ -1,0 +1,12 @@
+twig:
+    paths: ['%kernel.project_dir%/templates']
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    globals:
+        message_generator: "@App\\Service\\Mailer"
+        dashboard_notifications: "@App\\Service\\DashboardNotifications"
+        get_categories: "@App\\Service\\Categories"
+        listing_images: "@App\\Service\\ListingImages"
+        prices: "@App\\Service\\Currency"
+        get_profile: "@App\\Service\\Profile"
+        pay: "@App\\Service\\Pay"

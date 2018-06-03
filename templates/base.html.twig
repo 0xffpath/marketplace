@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Wolfort{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/css/bulma.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    {% block stylesheets %}{% endblock %}
+</head>
+{% block nav %}{% endblock %}
+{% set fiatPrices = prices.getFiatAll() %}
+{% set btcFiatPrice = fiatPrices['BTC'] %}
+{% set xmrFiatPrice = fiatPrices['XMR'] %}
+{% set zecFiatPrice = fiatPrices['ZEC'] %}
+{% set cryptoPrices = prices.getAll() %}
+{% set btcPrice = cryptoPrices['BTC'] %}
+{% set xmrPrice = cryptoPrices['XMR'] %}
+{% set zecPrice = cryptoPrices['ZEC'] %}
+
+<body>
+    <a class="mobile" href="https://m.cyfer.ru">Click to go to mobile site</a>
+    <div class="main">
+        {% block body %}{% endblock %}
+    </div>
+    {% block footer %}
+        <footer class="footer hero is-link">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-one-quarter">
+                        <br />
+                        <p>Bitcoin: {{ btcFiatPrice.USD }} USD</p>
+                        <p>Monero: {{ xmrFiatPrice.USD }}  USD</p>
+                        <p>Zcash: {{ zecFiatPrice.USD }} USD</p>
+                        <p>Bitcoin: {{ btcFiatPrice.GBP }} GBP</p>
+                        <p>Monero: {{ xmrFiatPrice.GBP }} GBP</p>
+                    </div>
+                    <div class="column is-one-quarter">
+                        <br />
+                        <p>Zcash: {{ zecFiatPrice.GBP }}  GBP</p>
+                        <p>Bitcoin: {{ btcFiatPrice.AUD }} AUD</p>
+                        <p>Bitcoin: {{ btcFiatPrice.NZD }} NZD</p>
+                        <p>Bitcoin: {{ btcFiatPrice.CHF }}CHF</p>
+                        <p>Bitcoin: {{ btcFiatPrice.CAD }} CAD</p>
+                    </div>
+                    <div class="column is-one-quarter">
+                        <br />
+                        <p><a href="/support/">Support/Customer Contact</a></p>
+                        <p><a href="/support/privacy/">Privacy Policy</a></p>
+                        <p><a href="/canary/">Warrant Canary</a></p>
+                        <p><a href="/exit?url=https://github.com/cyferconnect/marketplace/">GitHub</a></p>
+                        <p><a href="http://cyfer.ru/">Cyfer</a></p>
+                    </div>
+                    <div class="column is-one-quarter">
+                        <br />
+                        <p><a href="/forum/">Forum</a></p>
+                        <p><a href="/home/">Home</a></p>
+                        <p><a href="/market-pgp/">PGP Key</a></p>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column has-text-centered">
+                        <h5><i class="fa fa-copyright"></i> July 2017 Copyright - Cyfer Team</h5>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    {% endblock %}
+</body>
+</html>

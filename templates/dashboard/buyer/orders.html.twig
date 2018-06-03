@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Orders{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active">
+                                            <a><i class="fa fa-shopping-cart"></i>&nbsp;Orders</a>
+                                        </li>
+                                        <li class="is-pulled-right" style="margin-left:auto;">
+                                            <strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong>&nbsp;Orders will be deleted after 30 days of no activity.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <div class="row">
+                                    <table style="font-size:14px;margin-bottom:0px;" class="table">
+                                        {% if orders %}
+                                            <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Item(s)</th>
+                                                <th>Vendor</th>
+                                                <th>Total</th>
+                                                <th>Shipping</th>
+                                                <th>Auto-Finalize</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for order in orders %}
+                                                {{ pay.setPaid(order.uuid) }}
+                                                <tr>
+                                                    <td scope="row">#{{ order.id }}</td>
+                                                    <td>{{order.amount}} x <a href="/l/{{ order.listing }}/">{{ order.title }}</a></td>
+                                                    <td><a href="/vendor/{{ order.vendor }}">{{ order.vendor }}</a></td>
+                                                    <td>{{ order.fiat }} {{ order.total }} <br> <small class="text-light-grey">{{ order.crypto|upper }} {{ order.cryptoTotal }}</small></td>
+                                                    <td>{{ order.shippingType == 'physical' ? 'Physical Delivery' : 'Digital Delivery' }}</td>
+                                                    <td>
+                                                        {% if order.autoDate == null %}
+                                                            -
+                                                        {% else %}
+                                                            {{ order.autoDate|date("Y-m-d h:m") }} UTC
+                                                        {% endif %}
+                                                    </td>
+                                                    <td><span class="tag
+                                                             is-{{ order.bootstrap }}">{{ order.status }}</span></td>
+                                                    <td><a class="button is-primary is-small" href="/order/{{order.uuid}}/">Details</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        {% else %}
+                                            <div class="message">
+                                                <article class="message-body">
+                                                    <h2>You have no orders!</h2>
+                                                </article>
+                                            </div>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    {% if totalPages > 1 %}
+                        <nav class="pagination">
+                            <ul class="pagination-list">
+                                {% set forward = page+1 %}
+                                {% set backward = page-1 %}
+                                {% if page != 1 %}
+                                    <li>
+                                        <a class="pagination-previous" href="?{{ (app.request.query.all|merge({'page': backward}))|url_encode }}">&laquo;</a>
+                                    </li>
+                                {% endif %}
+                                {% for i in range(1, totalPages) %}
+                                    <li>
+                                        <a class="pagination-link {{ page == i ? 'is-current' }}" href="?{{ (app.request.query.all|merge({'page': i}))|url_encode }}">{{ i }}</a>
+                                    </li>
+                                {% endfor %}
+                                {% if page != totalPages %}
+                                    <li>
+                                        <a class="pagination-next" href="?{{ (app.request.query.all|merge({'page': forward}))|url_encode }}">&raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Store{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2 is-paddingless-top">
+                    {% include 'categories.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2>
+                                        {{ title }}
+                                        {% set filter = app.request.get('filter') %}
+                                        {% if app.request.get('xmr') == null  %}
+                                            <a class="button is-small is-primary" href="{{ app.request.uri }}{{ app.request.query is empty ? '?filter=true' : '&filter=true' }}"><i class="fa fa-plus-circle"></i>&nbsp;filter</a>
+                                        {% endif %}
+                                        {% if app.request.get('xmr') != null %}
+                                            <a class="button is-small is-danger" href="{{ path('market', {'search' : (app.request.get('search'))}) }}"><i class="fa fa-remove"></i>&nbsp;Clear Filter</a>
+                                        {% endif %}
+                                    </h2>
+                                    {% if filter %}
+                                        <hr />
+                                        <form action="{{ app.request.uri }}" method="get">
+                                            <input type="hidden" name="search" value="{{ app.request.get("search") }}"/>
+                                            <input type="hidden" name="cat" value="{{ app.request.get("cat") }}"/>
+                                            <input type="hidden" name="sub" value="{{ app.request.get("sub") }}"/>
+                                            <div class="columns">
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label" for="type">Listing Class</label>
+                                                        <div id="type" class="control">
+                                                            <input id="filter_physical" name="physical" value="1" checked="checked" type="checkbox"> Physical<br>
+                                                        </div>
+                                                        <div class="control">
+                                                            <input id="filter_digital" name="digital" value="1" checked="checked" type="checkbox"> Digital
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <label class="label" for="price">Price</label>
+                                                        <div id="price" class="field is-grouped">
+                                                            <div class="control">
+                                                                <input id="filter_min" autocomplete="off" step="any" name="min" placeholder="min" class="input" type="number">
+                                                            </div>
+                                                            <div class="control">
+                                                                <input id="filter_max" autocomplete="off" step="any" name="max" placeholder="max" class="input" type="number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <label class="label" for="level">Positive Feedback</label>
+                                                        <div class="control">
+                                                            <input class="checkbox" id="filter_physical" name="positive" value="1" checked="checked" type="checkbox"> <small class="text-light-grey">(>80% positive)</small><br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field is-grouped">
+                                                        <div class="control">
+                                                            <button type="submit" id="filter_apply" class="button is-small is-success">Apply</button>
+                                                        </div>
+                                                        <div class="control">
+                                                            <a class="button is-small is-danger" href="{{ path('market', {'search' : (app.request.get('search'))}) }}">Cancel</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-6">
+                                                    <div class="field">
+                                                        <label class="label" for="min">Currency</label>
+                                                        <div id="min" class="control">
+                                                            <input type="checkbox" checked name="btc" value="1"/> Bitcoin <br />
+                                                            <input type="checkbox" checked name="xmr" value="1"/> Monero <br />
+                                                            <input type="checkbox" checked name="zec" value="1"/> Zcash <br />
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <div id="level" class="control">
+                                                            <input id="filter_verified" name="verified" value="1" type="checkbox"> Verified Vendors Only
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <div id="level" class="control">
+                                                            <input id="filter_active" name="active" value="1" type="checkbox"> Active Vendors <small class="text-light-grey">Online in last 3 days.</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="field">
+                                                        <label class="label" for="price">Minimum Level</label>
+                                                        <div id="price" class="field is-grouped">
+                                                            <div class="control">
+                                                                <input id="filter_level" autocomplete="off" step="1" name="level" value="1" max="9" min="1" class="input" type="number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    {% endif %}
+                                    {% if not listings %}
+                                        <hr/>
+                                        <h3><i class="fa fa-folder-open-o"></i> There are no results.</h3>
+                                    {% endif %}
+                                    {% for listing in listings %}
+                                        <hr/>
+                                        <div class="columns">
+                                            <div class="column is-11">
+                                                <div class="columns">
+                                                    <div class="column is-2">
+                                                        <figure class="image product-image">
+                                                            <img src="/uploads/images/{{ listing_images.getImage(listing.uuid, 0) }}">
+                                                        </figure>
+                                                        {% if app.user %}
+                                                            <a href="/wishlist/{{ listing.uuid }}/?return={{ app.request.uri|url_encode }}#p{{ listing.id }}" style="width:100%;" class="button {{ listing.wishlist == true ? 'is-danger' }}">{{ listing.wishlist != true ? '<i class="fa fa-plus"></i>&nbsp;Wishlist' : '<i class="fa fa-minus"></i>&nbsp;Wishlist' }}</a>
+                                                        {% else %}
+                                                            <a href="/wishlist/{{ listing.uuid }}/?return={{ app.request.uri }}" style="width:100%;" class="button"><i class="fa fa-plus"></i>&nbsp;Wishlist</a>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="column is-5">
+                                                        <p>
+                                                            <a href="/l/{{ listing.uuid }}/"><h4 id="p{{ listing.id }}">{{ listing.title }}</h4></a>
+                                                            <a href="/profile/{{ listing.username }}/">{{ listing.username }}</a>
+                                                            [<span style="color:green;">+{{ listing.positive }}</span>|<span style="color:red;">{{ listing.negative }}</span>]
+                                                            {% if listing.verified %}
+                                                                <span class="tag is-success"><i class="fa fa-star"></i> Verified</span>
+                                                            {% endif %}
+                                                            <span class="tag">Level {{ listing.level }}</span>
+                                                        </p>
+                                                        <p><i class="fa fa-truck"></i> Ships from {{ listing.fromCountry }}.</p>
+                                                        {% if listing.excludeCountries %}
+                                                            <p class="shippingIcon"><i class="fa fa-info-circle"></i> Shipping</p>
+                                                            <span class="shipping"><b>Does not ship to {{ listing.excludeCountries }}</b></span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="column is-2">
+                                                        {% set price = listing.price - listing.discount %}
+                                                        {% if listing.discount == 0 %}
+                                                            <h4 style="margin:0px;"><b>{{ listing.fiat }} {{ listing.price }}</b></h4>
+                                                        {% else %}
+                                                            <h4 style="margin:0px;"><b><s>{{ listing.price }}</s>&nbsp;{{ price }}&nbsp;{{ listing.fiat }}</b></h4>
+                                                        {% endif %}
+                                                        {% if listing.btc %}
+                                                            <p style="margin:0px;" class="text-light-grey"><i class="cc BTC"></i> {{ btcPrice[listing.fiat] * price }}</p>
+                                                        {% endif %}
+                                                        {% if listing.xmr %}
+                                                            <p style="margin:0px;" class="text-light-grey"><i class="cc XMR"></i> {{ xmrPrice[listing.fiat] * price }}</p>
+                                                        {% endif %}
+                                                        {% if listing.zec %}
+                                                            <p style="margin:0px;" class="text-light-grey"><i class="cc ZEC"></i> {{ zecPrice[listing.fiat] * price }}</p>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="column is-3">
+                                                        <a style="width:100%;" href="/l/{{ listing.uuid }}/" class="button is-large is-fullwidth is-success"><i class="fa fa-shopping-cart"></i>&nbsp;Buy Now</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <br />
+                                    {% if totalPages > 1 %}
+                                        <nav class="pagination">
+                                            <ul class="pagination-list">
+                                                {% set forward = page+1 %}
+                                                {% set backward = page-1 %}
+                                                {% if page != 1 %}
+                                                    <li>
+                                                        <a class="pagination-previous" href="/market/?{{ (app.request.query.all|merge({'page': backward}))|url_encode }}">&laquo;</a>
+                                                    </li>
+                                                {% endif %}
+                                                {% for i in range(1, totalPages) %}
+                                                    <li>
+                                                        <a class="pagination-link {{ page == i ? 'is-current' }}" href="/market/?{{ (app.request.query.all|merge({'page': i}))|url_encode }}">{{ i }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                                {% if page != totalPages %}
+                                                    <li>
+                                                        <a class="pagination-next" href="/market/?{{ (app.request.query.all|merge({'page': forward}))|url_encode }}">&raquo;</a>
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

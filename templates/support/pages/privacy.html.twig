@@ -1,0 +1,45 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Privacy{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Privacy</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <ul>
+                                    <li>JavaScript is optional, and the site is 100% functional without it.</li>
+                                    <li>There are no third party fonts, images, CSS, JavaScript, and there are no request sent outside of servers owned by Cyfer. This prevents the tech giants from spying on you through tracking scripts.</li>
+                                    <li>We give you the option to encrypt the messages that you send to the vendor. This makes it impossible for us to know your name, address, or any other personal information.</li>
+                                    <li>The web server keeps page request logs for 24 hours, at which point the logs are overwritten and wiped.</li>
+                                    <li>Orders and messages are kept for a maximum for 30 inactive days, at which point they are overwritten and wiped.</li>
+                                    <li>We do not keep IP address, browser fingerprints, or any other identifying information on our users.</li>
+                                    <li>The database uses full homomorphic encryption (buzzword), meaning everything is fully encrypted until it reaches your computer. The only time your data is decrypted is when it reaches the web server, at which point is is decrypted from the database query, and re-encrypted through TLS (or the opposite if you are sending data).</li>
+                                    <li>Many sites on the Internet use CloudFlare which acts as a man-in-the-middle between you and the web server. CloudFlare prevents DDoS attacks, the downside is that they can see all of your traffic that you send to the site. In order to protect your privacy we use DDoS protection service managed by ourselves.</li>
+                                    <li>We welcome the use of our hidden service or eepsite. This makes it nearly impossible for any government, corporation, (or even us for that matter) to identify  you. <a href="/tor/risks/">Attacks on Tor users are possible.</a></li>
+                                    <li><b>We make no promises to anonymity, we will do our best to protect your privacy but you too must be wary.</b></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

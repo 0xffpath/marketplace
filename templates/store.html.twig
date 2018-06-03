@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Store{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2 is-paddingless-top">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% set cat = app.request.get('cat') %}
+                                {% set subactive = app.request.get('sub') %}
+                                <i class="fa fa-bars" aria-hidden="true"></i> Categories
+                                {% if cat %}
+                                    <a class="button is-small is-pulled-right" href="/store/{{ app.request.get('username') }}/">shrink</a>
+                                {% endif %}
+                            </h3>
+                        </div>
+                        {% set categories = get_categories.getCategories(cat) %}
+                        {% if cat is empty %}
+                            {% for category in categories['categories'] %}
+                                {% if category.itemTotal != 0 %}
+                                    <a href="/store/{{ app.request.get('username') }}/?cat={{category.id}}" class="sidebarLink panel-block is-block {{ cat is defined and cat == category.id ? 'is-active' }}">
+                                        <div class="items">
+                                            <span class="tag is-success">{{ category.itemTotal }}</span>
+                                        </div>
+                                        <span class="is-right">{{ category.title }}</span>
+                                    </a>
+                                    {% if cat is defined and cat == category.id %}
+                                        {% for sub in categories['sub'] %}
+                                            <a href="/store/{{ app.request.get('username') }}/?cat={{ category.id }}&sub={{ sub.id }}" class="sidebarLink sub panel-block is-block {{ subactive is defined and subactive == sub.id ? 'is-active-sub' }}">
+                                                <span class="tag is-warning is-pulled-right">{{ sub.itemTotal }} </span>
+                                                <span class="subcat-text">{{ sub.title }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for category in categories['categories'] %}
+                                {% if cat == category.id and category.itemTotal != 0%}
+                                    <a href="/store/{{ app.request.get('username') }}/?cat={{category.id}}" class="sidebarLink panel-block is-block {{ cat is defined and cat == category.id ? 'is-active' }}">
+                                        <div class="items">
+                                            <span class="tag is-success">{{ category.itemTotal }}</span>
+                                        </div>
+                                        <span class="is-right">{{ category.title }}</span>
+                                    </a>
+                                    {% if cat is defined and cat == category.id %}
+                                        {% for sub in categories['sub'] %}
+                                            <a href="/store/{{ app.request.get('username') }}/?cat={{ category.id }}&sub={{ sub.id }}" class="sidebarLink sub panel-block is-block {{ subactive is defined and subactive == sub.id ? 'is-active-sub' }}">
+                                                <span class="tag is-warning is-pulled-right">{{ sub.itemTotal }} </span>
+                                                <span class="subcat-text">{{ sub.title }}</span>
+                                            </a>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 style="margin-top:2px;" class="is-inline-block"><a href="/profile/{{ profile.username }}/">{{ profile.username }}</a></h1>
+                            <span class="tag is-primary">Vendor</span>
+                            {% if profile.verified %}
+                                <span class="tag is-success"><i class="fa fa-star"></i> Trusted Vendor</span>
+                            {% endif %}
+                            <small class="is-pulled-right">Last seen - {{ profile.lastSeen|date("Y-m-d") }} UTC</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    {% if not listings %}
+                        <hr />
+                        <h3><i class="fa fa-folder-open-o"></i> This user does not have any listings.</h3>
+                    {% endif %}
+
+                    {% for listing in listings %}
+                        <hr/>
+                        <div class="columns">
+                            <div class="column is-11">
+                                <div class="columns">
+                                    <div class="column is-2">
+                                        <figure class="image product-image">
+                                            <img src="/uploads/images/{{ listing_images.getImage(listing.uuid, 0) }}">
+                                        </figure>
+                                        {% if app.user %}
+                                            <a href="/wishlist/{{ listing.id }}/?return={{ app.request.uri|url_encode }}#p{{ listing.id }}" style="width:100%;" class="button {{ listing.wishlist != true ? '' : 'is-danger' }}">{{ listing.wishlist != true ? '<i class="fa fa-plus"></i>&nbsp;Wishlist' : '<i class="fa fa-minus"></i>&nbsp;Wishlist' }}</a>
+                                        {% else %}
+                                            <a href="/wishlist/{{ listing.id }}/?return={{ app.request.uri }}" style="width:100%;" class="button"><i class="fa fa-plus"></i>&nbsp;Wishlist</a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="column is-5">
+                                        <p>
+                                            <a href="/l/{{ listing.uuid }}/"><h4 id="p{{ listing.id }}">{{ listing.title }}</h4></a>
+                                            <a href="/profile/{{ listing.username }}/">{{ listing.username }}</a>
+                                        </p>
+                                        <p><i class="fa fa-truck"></i> Ships from {{ listing.fromCountry }}.</p>
+                                        {% if listing.excludeCountries %}
+                                            <p class="shippingIcon"><i class="fa fa-info-circle"></i> Shipping</p>
+                                            <span class="shipping"><b>Does not ship to {{ listing.excludeCountries }}</b></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="column is-2">
+                                        <h4 style="margin:0px;"><b>{{ listing.fiat }} {{ listing.price }}</b></h4>
+                                        <p style="margin:0px;" class="text-light-grey"><i class="cc BTC"></i> {{ btcPrice[listing.fiat] * listing.price }}</p>
+                                        <p style="margin:0px;" class="text-light-grey"><i class="cc XMR"></i> {{ xmrPrice[listing.fiat] * listing.price }}</p>
+                                        <p style="margin:0px;" class="text-light-grey"><i class="cc ZEC"></i> {{ zecPrice[listing.fiat] * listing.price }}</p>
+                                    </div>
+                                    <div class="column is-3">
+                                        <a style="width:100%;" href="/l/{{ listing.id }}/" class="button is-large is-fullwidth is-success"><i class="fa fa-shopping-cart"></i>&nbsp;Buy Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

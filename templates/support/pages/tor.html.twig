@@ -1,0 +1,42 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Tor{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Tor</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-full">
+                                <h3 id="finalize">What are the risks of visiting clearnet sites with Tor?</h3>
+                                <div style="margin-left:10px;">
+                                    <ul>
+                                        <li>If an adversary controls the entry guard and exit node, they are able to tell what clearnet sites you visit.</li>
+                                        <li>If an adversary controls the website you are visiting and the entry guard, they are able to tell that you visited their site.</li>
+                                        <li>It is worth considering that a single entity, CloudFlare, controls much of the web traffic on the Internet today. If they ran entry guards they would be able to deanonimize many users.</li>
+                                        <li><b>If you visit onion sites, these issues are not a problem.</b></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - {{ user.username }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns">
+            <div class="column is-10 is-offset-1">
+                <div class="content">
+                    <div class="panel-heading">
+                        <div class="columns">
+                            <div class="column is-6">
+                                <p style="margin-top:2px;" class="is-inline-block is-marginless-bottom">{{ user.username }}</p>
+                                {% if role == 'buyer' %}
+                                    <span class="tag is-primary">User</span>
+                                {% elseif user.verified and role == 'vendor' %}
+                                    <span class="tag is-success"><i class="fa fa-star"></i>&nbsp;Trusted Vendor</span>
+                                {% elseif role == 'vendor' %}
+                                    <span class="tag is-primary">vendor</span>
+                                {% else %}
+                                    <span class="tag is-primary">user</span>
+                                {% endif %}
+                                <span class="tag is-warning">Level {{ user.level }}</span>
+                                <br />
+                                {% if role == 'vendor' %}
+                                    <small class="has-text-grey has-text-small">Last seen - {{ user.lastSeen|date("Y-m-d") }} UTC | <i class="fa fa-user"></i> user since - {{ user.joinDate|date("Y-m-d") }}</small>
+                                {% endif %}
+                            </div>
+                            {% if role == 'vendor' %}
+                                <br />
+                                <div class="column is-6">
+                                    <a class="button is-pulled-right" href="/messages/new/?username={{ user.username }}"><i class="fa fa-envelope"></i>&nbsp;Send Message</a>
+                                    <span class="pull-right">&nbsp;</span>
+                                    <a href="/store/{{ user.username }}" class="button is-pulled-right"><i class="fa fa-list"></i>&nbsp;Visit Store</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% if role == 'vendor' %}
+                            <div class="columns">
+                                <div class="column is-4">
+                                    <h4 style="margin-top:2px;margin-bottom:20px;">Feedback Ratings</h4>
+                                    <div class="columns">
+                                        <div class="column is-3">
+                                                <span class="positive">
+                                                    <i class="fa fa-thumbs-o-up"></i>
+                                                </span>
+                                            <b>&nbsp;{{ user.positive }}</b>
+                                            <br />
+                                            <small class="has-text-grey has-text-small">Positive</small>
+                                        </div>
+                                        <div class="column is-3">
+                                                <span class="neutral">
+                                                    <i class="fa fa-circle-o"></i>
+                                                </span>
+                                            <b>&nbsp;{{ user.neutral }}</b>
+                                            <br>
+                                            <small class="has-text-grey has-text-small">Positive</small>
+                                        </div>
+                                        <div class="column is-3">
+                                                <span class="negative">
+                                                    <i class="fa fa-thumbs-o-down"></i>
+                                                </span>
+                                            <b>&nbsp;{{ user.negative }}</b>
+                                            <br>
+                                            <small class="has-text-grey has-text-small">Positive</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column is-4">
+                                    <h4 style="margin-top:2px;margin-bottom:20px;">Orders</h4>
+                                    <h4><b>{{ user.totalSell }}</b></h4>
+                                </div>
+                                <div class="column is-4">
+                                    <h4 style="margin-top:2px;margin-bottom:20px;">Feedback</h4>
+                                    {% if user.totalFeedback %}
+                                        {% set rating = (user.positive+(user.neutral*0.8))/user.totalFeedback*100 %}
+                                        <h4><b>{{ rating|round }}%</b></h4>
+                                    {% else %}
+                                        <h4>None</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if role == 'vendor' %}
+                    {% set tab = app.request.query.get('tab') %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabs is-paddingless-left">
+                                <ul class="is-marginless-left">
+                                    <li></li>
+                                    <li role="nav" class="{{ tab == 'profile' or tab == '' ? 'is-active' : '' }}">
+                                        <a href="/profile/{{ user.username }}/">Profile</a>
+                                    </li>
+                                    <li role="nav" class="{{ tab == 'tac' ? 'is-active' : '' }}">
+                                        <a href="/profile/{{ user.username }}/?tab=tac">Terms & Conditions</a>
+                                    </li>
+                                    <li role="nav" class="{{ tab == 'pgp' ? 'is-active' : '' }}">
+                                        <a href="/profile/{{ user.username }}/?tab=pgp">PGP</a>
+                                    </li>
+                                    <li role="nav" class="{{ tab == 'feedback' ? 'is-active' : '' }}">
+                                        <a href="/profile/{{ user.username }}/?tab=feedback">Feedback</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="panel-body background-white">
+                                <div class="content">
+                                    {% if tab == 'pgp' %}
+                                        <div class="form-group row">
+                                            <div class="col-sm-12">
+                                                <textarea class="textarea" rows="10" readonly="true">{{ user.pgp }}</textarea>
+                                            </div>
+                                        </div>
+                                    {% elseif tab == 'feedback' %}
+                                        {% if feedback %}
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th>Rating</th>
+                                                    <th>User</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for each in feedback %}
+                                                    <tr>
+                                                        <td>
+                                                            {% if each.feedback == 'Positive' %}
+                                                                <div class="tag is-success">Positive</div>
+                                                            {% elseif each.feedback == 'Neutral' %}
+                                                                <div class="tag is-default">Neutral</div>
+                                                            {% elseif each.feedback == 'Negative' %}
+                                                                <div class="tag is-danger">Negative</div>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {{ each.buyer[:1] }}{% for i in 0..(each.buyer|length - 2) %}*{% endfor %}{{ each.buyer[(each.buyer|length-1):] }}
+                                                        </td>
+                                                        <td>
+                                                            {{ each.comment }}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            <i class="fa fa-star-half-o"></i> This vendor does not have any feedback yet.
+                                        {% endif %}
+                                    {% elseif tab == 'tac' %}
+                                        {% if user.tac %}
+                                            {{ user.tac|nl2br }}
+                                        {% else %}
+                                            <i class="fa fa-gavel"></i> This vendor does not have any terms & conditions.
+                                        {% endif %}
+                                    {% else %}
+                                        {% if user.profile %}
+                                            {{ user.profile|nl2br }}
+                                        {% else %}
+                                            <i class="fa fa-book"></i> This vendor does not have a profile description.
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

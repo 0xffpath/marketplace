@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - {{ thread.subject }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+    <div class="columns is-multiline">
+    <div class="column is-one-fifths">
+        <div class="column is-10 is-offset-2">
+            {% include '/dashboard/sidebar.html.twig' %}
+        </div>
+    </div>
+    <div class="column is-four-fifths">
+        <div class="column is-10">
+            <div class="content">
+                <div class="columns is-multiline">
+                    <div class="column is-full">
+                        <div class="tabs is-paddingless-left">
+                            <ul class="is-marginless-left">
+                                <li></li>
+                                {% if app.user.roles.0 == 'buyer' or app.user.roles.0 == 'vendor'  %}
+                                    <li role="nav">
+                                        <a href="/messages/"><i class="fa fa-plus"></i>&nbsp;Messages</a>
+                                    </li>
+                                {% elseif app.user.roles.0 == 'admin' %}
+                                    <li role="nav">
+                                        <a href="/staff/messages/"><i class="fa fa-plus"></i>&nbsp;Messages</a>
+                                    </li>
+                                {% endif %}
+                                <li role="nav" class="is-active">
+                                    <a><i class="fa fa-envelope"></i>&nbsp;{{ thread.subject }}</a>
+                                </li>
+                                <li class="is-pulled-right" style="margin-left:auto;">
+                                    <strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong>&nbsp;Messages will be deleted after 30 days of no activity.
+                        </div>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column is-full">
+                    <div class="column">
+                        {% include '/dashboard/shared/message.html.twig' %}
+                    </div>
+                    <hr class="hr-sm"/>
+                    {{ form_start(messageForm) }}
+                    {{ form_errors(messageForm) }}
+                    <div class="field">
+                        <div class="control">
+                            {{ form_widget(messageForm.message) }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form_row(messageForm.submit) }}
+                        </div>
+                    </div>
+
+                    {{ form_end(messageForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

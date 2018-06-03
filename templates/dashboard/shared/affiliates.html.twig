@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Affiliates{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}" />
+{% endblock %}
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a>Affiliates</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <h3><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Affiliate Link</h3>
+                                <p>You earn 50% of the transaction fee (1% of the value of the transaction) from users who register using your link. It is <b>only</b> available for purchases with Monero and Zcash.</p>
+                                <div class="field">
+                                    <div class="control">
+                                        <input type="text" class="input" value="{{ link }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <h3><i class="fa fa-dollar" aria-hidden="true"></i>&nbsp;Balance</h3>
+                                <p><b>Monero:</b> {{ monero }}</p>
+                                <p><b>Zcash:</b> {{ zcash }}</p>
+                                {{ form_start(withdrawForm) }}
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(withdrawForm.withdraw) }}
+                                    </div>
+                                </div>
+                                {{ form_end(withdrawForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Two Factor{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-full"></div>
+            <div class="column is-4 is-offset-4">
+                <div class="column is-10 is-offset-1">
+                    <div class="content">
+                        <h3>Login</h3>
+                        <form {{ path('login') }} method="post" id="login">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-medium is-fullwidth">
+                                        <select id="login_role" name="_role">
+                                            <option value="buyer">buyer</option>
+                                            <option value="vendor">vendor</option>
+                                            <option value="new_vendor">new vendor</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    <input type="text" id="login_username" name="_username" required="required" class="input is-medium" placeholder="username" autocomplete="off" />
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-success">Continue</button>
+                                    <a href="{{ path('login') }}" class="button is-danger">Cancel 2FA</a>
+                                </div>
+                            </div>
+                        </form>
+                        {%  if error %}
+                            <div class="card card-outline-danger text-center">
+                                <div class="card-block">
+                                    <blockquote class="card-blockquote">
+                                        <p class="text-danger"> User does not exist. </p>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

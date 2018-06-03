@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Messages{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active">
+                                            <a><i class="fa fa-envelope"></i>&nbsp;Messages</a>
+                                        </li>
+                                        {% if app.user.roles.0 == 'buyer' or app.user.roles.0 == 'vendor' %}
+                                            <li role="nav">
+                                                <a href="/messages/new/"><i class="fa fa-plus"></i>&nbsp;New</a>
+                                            </li>
+                                        {% elseif app.user.roles.0 == 'admin' %}
+                                            <li role="nav">
+                                                <a href="/staff/messages/new/"><i class="fa fa-plus"></i>&nbsp;New</a>
+                                            </li>
+                                        {% endif %}
+                                        <li class="is-pulled-right" style="margin-left:auto;">
+                                            <strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong>&nbsp;Messages will be deleted after 30 days of no activity.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <table style="font-size:14px;" class="table">
+                                    {% if threads %}
+                                        <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>From</th>
+                                            <th>Started</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for thread in threads %}
+                                            <tr>
+                                                <td>
+                                                    {% if app.user.roles.0 == 'buyer' or app.user.roles.0 == 'vendor' %}
+                                                        <a href="/message/{{ thread.uuid }}/">{{ thread.subject }}</a>
+                                                        {% if thread.seen == 0 %}
+                                                            <div class="tag is-success">New</div>
+                                                        {% endif %}
+                                                    {% elseif app.user.roles.0 == 'admin' %}
+                                                        <a href="/staff/message/{{ thread.id }}/">{{ thread.subject }}</a>
+                                                        {% if thread.seen == 0 %}
+                                                            <div class="tag is-success">New</div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="/profile/{{ thread.username }}/">{{ thread.username }}</a>
+                                                </td>
+                                                <td>{{ thread.startDate|date("F j, Y, g:i a") }} UTC</td>
+                                                <td><a class="button is-danger is-small" href="/message/delete/{{ thread.uuid }}/">Delete</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    {% else %}
+                                        <div class="message">
+                                            <article class="message-body">
+                                                <h2>You have no messages.</h2>
+                                            </article>
+                                        </div>
+                                    {% endif %}
+                                </table>
+                                {% if totalPages > 1 %}
+                                    <ul class="pagination">
+                                        {% set forward = page+1 %}
+                                        {% set backward = page-1 %}
+                                        {% if page != 1 %}
+                                            <li><a href="?page={{ backward }}">&laquo;</a></li>
+                                        {% endif %}
+                                        {% for i in range(1, totalPages) %}
+                                            <li {{ page == i ? "class='active'" }}><a href="?page={{ i }}">{{ i }}</a></li>
+                                        {% endfor %}
+                                        {% if page != totalPages %}
+                                            <li><a href="?page={{ forward }}">&raquo;</a></li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

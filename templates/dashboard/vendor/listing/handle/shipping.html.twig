@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - New Listing{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                {% include '/dashboard/vendor/listing/handle/tabs.html.twig' %}
+                            </div>
+                            {% if disabled %}
+                                <div class="column is-full">
+                                    <div class="message is-danger">
+                                        <article class="message-body">Please make sure you have a PGP key, shipping options, and a Bitcoin, Monero, or Zcash address.</article>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="column is-full">
+                                    {{ form_start(form) }}
+                                    {% for flashMessage in app.session.flashbag.get('listingError') %}
+                                        <br/>
+                                        <div class="message is-danger">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    {% for flashMessage in app.session.flashbag.get('listingSuccess') %}
+                                        <br/>
+                                        <div class="message is-success">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="field">
+                                        <label class="label">Shipping</label>
+                                        <div class="select is-multiple">
+                                            {{ form_widget(form.shipping) }}
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Ships from</label>
+                                        <div class="select">
+                                            {{ form_widget(form.from) }}
+                                        </div>
+                                    </div>
+                                        <label>Does not ship to</label>
+                                        <p class="shippingIcon"><i class="fa fa-info-circle"></i></p>
+                                        <div class="message is-warning shipping">
+                                            <article class="message-body">
+                                                Select which continents you do <b>not</b> want to ship to. If you want to ship to a continent, but not to certain countries,
+                                                then do <b>not</b> select the continent but instead the specific countries in that continent that you don't want to ship to.
+                                            </article>
+                                        </div>
+                                        <div class="columns">
+                                            <div class="column is-one-third">
+                                                <div class="field">
+                                                    <div class="select is-multiple is-fullwidth">
+                                                        {{ form_widget(form.southAmericaAll) }} any of South America
+                                                        <small class="text-light-grey">(or exclude specific below)</small>
+                                                        {{ form_widget(form.southAmerica) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column is-one-third">
+                                                <div class="field">
+                                                    <div class="select is-multiple is-fullwidth">
+                                                        {{ form_widget(form.asiaAll) }} any of Asia
+                                                        <small class="text-light-grey">(or exclude specific below)</small>
+                                                        {{ form_widget(form.asia) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column is-one-third">
+                                                <div class="field">
+                                                    <div class="select is-multiple is-fullwidth">
+                                                        {{ form_widget(form.africaAll) }} any of Africa
+                                                        <small class="text-light-grey">(or exclude specific below)</small>
+                                                        {{ form_widget(form.africa) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="columns">
+                                            <div class="column is-one-third">
+                                                <div class="field">
+                                                    <div class="select is-multiple is-fullwidth">
+                                                        {{ form_widget(form.australiaAll) }} any of Australia
+                                                        <small class="text-light-grey">(or exclude specific below)</small>
+                                                        {{ form_widget(form.australia) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column is-one-third">
+                                                <div class="field">
+                                                    <div class="select is-multiple is-fullwidth">
+                                                        {{ form_widget(form.europeAll) }} any of Europe
+                                                        <small class="text-light-grey">(or exclude specific below)</small>
+                                                        {{ form_widget(form.europe) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="column is-one-third">
+                                                <div class="field">
+                                                    <div class="select is-multiple is-fullwidth">
+                                                        {{ form_widget(form.northAmericaAll) }} any of North America
+                                                        <small class="text-light-grey">(or exclude specific below)</small>
+                                                        {{ form_widget(form.northAmerica) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            {{ form_row(form.next) }}
+                                        </div>
+                                    </div>
+                                    {{ form_end(form) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

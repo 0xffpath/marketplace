@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - PGP{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns">
+            <div class="column is-6 is-offset-3">
+                <div class="content">
+                    {% if not submit %}
+                        {{ form_start(reportForm) }}
+                        <div class="card">
+                            <div class="card-header">
+                                        <span class="card-header-icon">
+                                            <i class="fa fa-gavel" aria-hidden="true"></i>
+                                        </span>
+                                <p class="card-header-title">
+                                    Report
+                                </p>
+                            </div>
+                            <div class="card-content">
+                                <article class="message is-danger">
+                                    <div class="message-body">
+                                        <b>Warning:</b> You will be banned if you make a frivolous report. Review the <a href="/rules/" target="_blank">vendor policy</a>.
+                                    </div>
+                                </article>
+                                {{  form_errors(reportForm) }}
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_widget(reportForm.offense) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label" for="login_security">Security Challenge</label>
+                                    <div class="control">
+                                        <img src="/img/captcha3/">
+                                        <p style="font-size:12px;color:#396e9a;"><i class="fa fa-exclamation-triangle"></i> Please make absolutely sure the URL inside the security image matches the one in your browser! If they do not match, leave this site immediately.</p>
+                                        <input type="text" autocomplete="off" id="login_security" name="_captcha" required="required" class="input is-medium" placeholder="enter text above" />
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(reportForm.submit) }}
+                                    </div>
+                                </div>
+                                {% for flashMessage in app.session.flashbag.get('captchaError') %}
+                                    <br/>
+                                    <div class="notification is-danger">
+                                        {{ flashMessage }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {{ form_end(reportForm) }}
+                    {% else %}
+                        <div class="card">
+                            <div class="card-header">
+                                        <span class="card-header-icon">
+                                            <i class="fa fa-gavel" aria-hidden="true"></i>
+                                        </span>
+                                <p class="card-header-title">
+                                    Reported
+                                </p>
+                            </div>
+                            <div class="card-content">
+                                <article class="message is-danger">
+                                    <div class="message-body">
+                                        We take allegations of rule breaking extremely seriously. Please allow us up to five business days to review your report and make a decision.
+                                        You will not hear back from us.
+                                    </div>
+                                </article>
+                                <a href="/" class="button is-success"><i class="fa fa-home"></i>&nbsp;Home</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Dashboard{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a href="?tab=orders"><i class="fa fa-info-circle"></i>&nbsp;Overview</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <h3 class="header">Admin Panel</h3>
+                                <hr class="hr-sm"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ dashboard_notifications.getReportTotal }}</h3>
+                                        <p class="item">&nbsp;reported listings</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-sm"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">0</h3>
+                                        <p class="item">&nbsp;Support</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-sm"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ dashboard_notifications.getDisputeTotal }}</h3>
+                                        <p class="item">&nbsp;disputed orders</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <h3 class="header">New Messages</h3>
+                                <hr class="hr-sm"/>
+                                {% if threads %}
+                                    <table style="font-size:14px;" class="table">
+                                        {% for thread in threads %}
+                                            <tr>
+                                                <td>
+                                                    <a href="/message/{{ thread.uuid }}/">
+                                                        {{ thread.subject }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ thread.lastMessage|date("F j, Y, g:i a") }} UTC</td>
+                                                <td>
+                                                    <a class="button is-warning is-small" href="/message/{{ thread.uuid }}/">View</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <h4><i class="fa fa-info-circle"></i> You have no new messages.</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

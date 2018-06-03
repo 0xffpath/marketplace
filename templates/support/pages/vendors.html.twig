@@ -1,0 +1,45 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Trusted Vendors{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Trusted Vendors</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <h3 id="order">What are trusted vendors?</h3>
+                                <ol>
+                                    <li>Vendors that have been deemed to be trustworthy.</li>
+                                    <li>They can finalize cryptocurrency orders early.</li>
+                                </ol>
+                                <h3 id="order">How are they vetted?</h3>
+                                <ol>
+                                    <li>They have 50 successful orders</li>
+                                    <li>They have above 90% positive feedback</li>
+                                    <li>They do a phone call with a staff member</li>
+                                    <li>Verified home address</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

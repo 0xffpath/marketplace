@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Exit{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-full"></div>
+            <div class="column is-6 is-offset-3">
+                <div class="content">
+                    <h2>You are leaving the marketplace.</h2>
+                    <hr />
+                    <h3>Do you wish to navigate to <b>{{ url }}</b>?</h3>
+                    <h4>If you are using Tor, be aware of the <a target="_blank" href="/support/tor/">risks</a>.</h4>
+                    <a class="button is-success" href="{{ url }}"><i class="fa fa-check-circle"></i>&nbsp;Continue</a>
+                    <a class="button is-danger" href="{{ return }}"><i class="fa fa-close"></i>&nbsp;Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

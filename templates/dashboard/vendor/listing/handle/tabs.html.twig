@@ -1,0 +1,32 @@
+<div class="tabs is-paddingless-left">
+    <ul class="is-marginless-left">
+        {% set route = app.request.get('_route') %}
+        {% set uuid = app.request.get('uuid') %}
+        <li></li>
+        <li role="nav"><a href="/listings/"><i class="fa fa-list"></i>&nbsp;Listings</a></li>
+        <li role="nav" class="{{ route == 'handleListingCategory' or route == 'handleListingCategoryEdit' ? 'is-active' }}"><a href="/listing/handle/category/{{ uuid != null ? uuid ~ '/' }}"><i class="fa fa-list"></i>&nbsp;Category</a></li>
+        {% if uuid != null %}
+            {% if step >= 1 %}
+                <li role="nav" class="{{ route == 'handleListingInfo' ? 'is-active' }}"><a href="/listing/handle/info/{{ uuid }}/"><i class="fa fa-info"></i>&nbsp;Info</a></li>
+            {% endif %}
+            {% if step >= 2 %}
+                <li role="nav" class="{{ route == 'handleListingPricing' ? 'is-active' }}"><a href="/listing/handle/pricing/{{ uuid }}/"><i class="fa fa-money"></i>&nbsp;Pricing</a></li>
+            {% endif %}
+            {% if step >= 3 %}
+                <li role="nav" class="{{ route == 'handleListingShipping' ? 'is-active' }}"><a href="/listing/handle/shipping/{{ uuid }}/"><i class="fa fa-truck"></i>&nbsp;Shipping</a></li>
+            {% endif %}
+            {% if step >= 4 %}
+                <li role="nav" class="{{ route == 'handleListingImages' ? 'is-active' }}"><a href="/listing/handle/images/{{ uuid }}/"><i class="fa fa-image"></i>&nbsp;Images</a></li>
+            {% endif %}
+            {% if step >= 5 %}
+                <li role="nav" class="{{ route == 'handleListingDescription' ? 'is-active' }}"><a href="/listing/handle/description/{{ uuid }}/"><i class="fa fa-pencil"></i>&nbsp;Description</a></li>
+            {% endif %}
+            {% if step >= 6 %}
+                <li role="nav" class="{{ route == 'handleListingSearch' ? 'is-active' }}"><a href="/listing/handle/search/{{ uuid }}/"><i class="fa fa-search"></i>&nbsp;Search</a></li>
+            {% endif %}
+            {% if step >= 6 %}
+                <li role="nav" class="{{ route == 'handleListingDiscount' ? 'is-active' }}"><a href="/listing/handle/discount/{{ uuid }}/"><i class="fa fa-arrow-down"></i>&nbsp;Discount</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+</div>

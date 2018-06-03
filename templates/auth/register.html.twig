@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Register{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-full"></div>
+                <div class="column is-4 is-offset-4">
+                    <div class="column is-10 is-offset-1">
+                        <div class="content">
+                            <h3>Register</h3>
+                            {{ form_start(form) }}
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select is-medium is-fullwidth">
+                                        {{ form_widget(form.role) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    {{ form_widget(form.username) }}
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    {{ form_widget(form.plainPassword.first) }}
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    {{ form_widget(form.plainPassword.second) }}
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control has-icons-left">
+                                    {{ form_widget (form.pin) }}
+                                    <span class="icon is-small is-left has-text-grey-dark">
+                                        <i class="fa fa-user-secret"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="login_security">Security Challenge</label>
+                                <div class="control">
+                                    <img src="/img/captcha3/">
+                                    <p style="font-size:12px;color:#396e9a;"><i class="fa fa-exclamation-triangle"></i> Please make absolutely sure the URL inside the security image matches the one in your browser! If they do not match, leave this site immediately.</p>
+                                    <input type="text" autocomplete="off" id="login_security" name="_captcha" required="required" class="input is-medium" placeholder="enter text above" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <button type="submit" class="button is-success">Register</button>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input value="{{ token }}" name="_token"  type="hidden" autocomplete="off" class="input"/>
+                                </div>
+                            </div>
+                            {% if form_errors(form.role) %}
+                                <br />
+                                <div class="notification is-danger">
+                                    Invalid role.
+                                </div>
+                            {% endif %}
+                            {% if form_errors(form.username) %}
+                                <br />
+                                <div class="notification is-danger">
+                                    Username taken or invalid.
+                                </div>
+                            {% endif %}
+                            {% if form_errors(form.plainPassword.first) or  form_errors(form.plainPassword.second)%}
+                                <br />
+                                <div class="notification is-danger">
+                                    Passwords do not match.
+                                </div>
+                            {% endif %}
+                            {% if form_errors(form.pin) %}
+                                <br />
+                                <div class="notification is-danger">
+                                    Invalid pin, must be between 3-6 numbers.
+                                </div>
+                            {% endif %}
+                            {% if captchaError %}
+                                <br />
+                                <div class="notification is-danger">
+                                    Invalid captcha.
+                                </div>
+                            {% endif %}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

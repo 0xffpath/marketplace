@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - New Listing{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                {% include '/dashboard/vendor/listing/handle/tabs.html.twig' %}
+                            </div>
+                            {% if disabled %}
+                                <div class="column is-full">
+                                    <div class="message is-danger">
+                                        <article class="message-body">Please make sure you have a PGP key, shipping options, and a Bitcoin, Monero, or Zcash address.</article>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="column is-full">
+                                    {{ form_start(form) }}
+                                    {% for flashMessage in app.session.flashbag.get('listingError') %}
+                                        <br/>
+                                        <div class="message is-danger">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    {% for flashMessage in app.session.flashbag.get('listingSuccess') %}
+                                        <br/>
+                                        <div class="message is-success">
+                                            <article class="message-body">{{ flashMessage }}</article>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="field">
+                                        <label class="label">Image <small class="text-light-grey">(only png, jpg, jpeg. To add an image, select file then click button at bottom.)</small></label>
+                                        <div class="control">
+                                            {{ form_widget(form.image) }}
+                                        </div>
+                                        {% set images = listing_images.getImages(app.request.get('uuid')) %}
+                                        {% if images %}
+                                            <p class="is-marginless-bottom">Click to delete. (must have >1)</p>
+                                        {% endif %}
+                                        <div class="columns is-multiline">
+                                            {% for image in images %}
+                                                <div class="image column is-one-fifth">
+                                                    <a href="/image/remove/{{ app.request.get('uuid') }}/{{ image.id }}/?return={{ app.request.uri }}">
+                                                        <img style="margin-top:2px;max-height:90px;max-width:90px;" src="/uploads/images/{{ image.image }}"/>
+                                                    </a>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            {{ form_row(form.upload) }}
+                                        </div>
+                                        <div class="control">
+                                            {% if images %}
+                                                <a class="button is-success" href="/listing/handle/description/{{ app.request.get('uuid') }}/">Next</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {{ form_end(form) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Multi-Signature{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Using Multi-Signature</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <p>Currently only Bitcoin transactions have multi-sig. Once Monero has better support for multi-sig, it will be added. Zcash multi-sig will be added when private
+                                multi-sig is implemented.</p>
+                            </div>
+                            <div class="column is-full">
+                                <h3 id="multi">Setup 2-of-3 Multisignature (for buyers).</h3>
+                                <div style="margin-left:10px;">
+                                    <h4>Electrum</h4>
+                                    <p><b>Steps:</b></p>
+                                    <ol>
+                                        <li>
+                                            Download and install Electrum. Create a backup and safely store this backup on
+                                            separate medium (USB stick).<br/>
+                                            -- For the best OPSEC you want to either encrypt the information on your USB with either
+                                            PGP or Veracrypt.--
+                                        </li>
+                                        <li>
+                                            At the top of your screen click on dashboard in the navigation bar and then to your left
+                                            click on "Currency".
+                                        </li>
+                                        <li>
+                                            Go to Electrum. Right click any wallet address and copy the PUBLIC key. Paste this into
+                                            the "Bitcoin public key" field and paste the address into the "Bitcoin address" field.
+                                        </li>
+                                    </ol>
+                                    <br />
+                                    <h4>Coinb.in (online wallet)</h4>
+                                    <p><b>Steps:</b></p>
+                                    <ol>
+                                        <li>
+                                            Go to <a href="/exit?url=https://coinb.in&referer=/support/multisig/">https://coinb.in/</a> and register an account.
+                                        </li>
+                                        <li>
+                                            Click on the public key drop down.
+                                        </li>
+                                        <li>
+                                            Paste this into the "Bitcoin public key" field and paste the address into the "Bitcoin address" field.
+                                        </li>
+                                    </ol>
+                                </div>
+                                <div style="margin-left:10px;">
+                                    <div class="column is-full">
+                                        <h3 id="hdbtc">HD Vendor Wallets.</h3>
+                                        <p>This allows unique Bitcoin addresses for each transaction.</p>
+                                        <p><b>Steps:</b></p>
+                                        <ol>
+                                            <li>Follow instructions above and install Electrum.</li>
+                                            <li>In Electrum on the top nav bar left click on "Wallet".</li>
+                                            <li>Click on "Master Public Keys" and copy the the address listed.</li>
+                                            <li>Paste this into the wallet field in the "Currency" tab of your vendor dashboard.</li>
+                                        </ol>
+                                        <p>HD Wallet example:</p>
+                                        <div style="margin-left:10px;">
+                                            <p><b>Wallet Master Key:</b>
+                                                xpub661MyMwAqRbcFaJjwZf9ibDsnmUN3J38fiToRnW9DPSCSRYV5MaHmomfgvYDjLDEsrDke97ZQC2B2M1CaygeUPDT9mtZfkDYewV71ukRQGk
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h3 id="multi">Setup 2-of-3 Multisignature (for vendors).</h3>
+                                <p>We can generate your Bitcoin public keys from the HD xpub key you provide.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

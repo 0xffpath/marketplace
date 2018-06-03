@@ -1,0 +1,51 @@
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% set cat = app.request.get('cat') %}
+            {% set subactive = app.request.get('sub') %}
+            <i class="fa fa-bars" aria-hidden="true" id="category"></i> Categories
+            {% if cat %}
+                <a class="button is-small is-pulled-right" id="showall" href="/market/{{ app.request.get('category') }}/"><span>show all</span></a>
+            {% endif %}
+        </h3>
+    </div>
+    {% if cat is empty %}
+        {% set categories = get_categories.getCategories() %}
+            {% for category in categories['categories'] %}
+            <a href="/market/?cat={{category.id}}" class="sidebarLink panel-block is-block {{ cat is defined and cat == category.id ? 'is-active' }}">
+                    <div class="items">
+                        <span class="tag is-success" id="category">{{ category.itemTotal }}</span>
+                    </div>
+                    <span class="is-right">{{ category.title }}</span>
+            </a>
+            {% if cat is defined and cat == category.id %}
+                {% for sub in categories['sub'] %}
+                    <a href="/market/?cat={{ category.id }}&sub={{ sub.id }}" class="sidebarLink sub panel-block is-block {{ subactive is defined and subactive == sub.id ? 'is-active-sub' }}">
+                            <span class="tag is-warning is-pulled-right" id="categoryamount">{{ sub.itemTotal }} </span>
+                            <span class="subcat-text">{{ sub.title }}</span>
+                    </a>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% set categories = get_categories.getBySub(cat) %}
+        {% for category in categories['categories'] %}
+            {% if cat == category.id %}
+                <a href="/market/?cat={{category.id}}" class="sidebarLink panel-block is-block {{ cat is defined and cat == category.id ? 'is-active' }}">
+                    <div class="items">
+                        <span class="tag is-success" id="category">{{ category.itemTotal }}</span>
+                    </div>
+                    <span class="is-right">{{ category.title }}</span>
+                </a>
+                {% if cat is defined and cat == category.id %}
+                    {% for sub in categories['sub'] %}
+                        <a href="/market/?cat={{ category.id }}&sub={{ sub.id }}" class="sidebarLink sub panel-block is-block {{ subactive is defined and subactive == sub.id ? 'is-active-sub' }}">
+                            <span class="tag is-warning is-pulled-right" id="category">{{ sub.itemTotal }} </span>
+                            <span class="subcat-text">{{ sub.title }}</span>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>

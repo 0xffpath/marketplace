@@ -1,0 +1,24 @@
+config:
+    # max transaction fee per level
+    # In USD
+    max:
+        1: 7
+        2: 7
+        3: 7
+        4: 7
+        5: 7
+        6: 5
+        7: 5
+        8: 5
+        9: 5
+    # fee per transaction
+    fee:
+        1: 0.01
+        2: 0.009
+        3: 0.008
+        4: 0.007
+        5: 0.006
+        6: 0.005
+        7: 0.004
+        8: 0.003
+        9: 0.002

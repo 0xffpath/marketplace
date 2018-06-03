@@ -1,0 +1,237 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - {{ item.order.title }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-8 is-offset-2">
+                <div class="content">
+                    <div class="columns is-multiline">
+                        {% if not paid %}
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a>Pay up</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-8">
+                                {% if not timeout %}
+                                    <p style="text-align:center;">Please transfer exactly</p>
+                                    <code class="code">
+                                        <p style="text-align:center;font-size:200%;">
+                                            {% if item.order.crypto == 'btc' %}<i class="cc BTC"></i>{% endif %}
+                                            {% if item.order.crypto == 'xmr' %}<i class="cc XMR"></i>{% endif %}
+                                            {% if item.order.crypto == 'zec' %}<i class="cc ZEC"></i>{% endif %}
+                                            <span style="background-color:#f9f2f4;display:inline-block;">{{ item.order.cryptoTotal }}</span>
+                                        </p>
+                                    </code>
+                                    <p style="text-align:center;">to</p>
+                                    <code class="code">
+                                        <p style="text-align:center;">
+                                          <span style="background-color:#f9f2f4;display:inline-block;font-size:200%;">
+                                              {{ item.order.address }}
+                                          </span>
+                                        </p>
+                                    </code>
+                                {% else %}
+                                    <div class="notification">
+                                        You failed to send
+                                        {% if item.order.crypto == 'btc' %}<i class="cc BTC"></i>{% endif %}
+                                        {% if item.order.crypto == 'xmr' %}<i class="cc XMR"></i>{% endif %}
+                                        {% if item.order.crypto == 'zec' %}<i class="cc ZEC"></i>{% endif %}
+                                        <span style="background-color:#f9f2f4;display:inline-block;">{{ item.order.cryptoTotal }}</span>
+                                        to {{ item.order.address }}. If you send money to this address, it <b>will</b> be lost.
+                                    </div>
+                                    <br />
+                                {% endif %}
+                                {% if not timeout %}
+
+                                    <p class="pull-right">{{ timeMinutes }}:{{ timeSeconds }}</p>
+                                    <div class="progress-pay">
+                                        <progress class="progress-pay-bar"></progress>
+                                    </div>
+                                    <style>
+                                        .progress-pay{
+                                            -moz-appearance: none;
+                                            -webkit-appearance: none;
+                                            border-radius: 290486px;
+                                            display: block;
+                                            height: 1rem;
+                                            overflow: hidden;
+                                            padding: 0;
+                                            width: 100%;
+                                            background: rgba(100, 100, 100, .1);
+                                        }
+                                        .progress-pay:not(:last-child) {
+                                            margin-bottom: 1.5rem;
+                                        }
+                                        .progress-pay-bar{
+                                            -moz-appearance: none;
+                                            -webkit-appearance: none;
+                                            border: none;
+                                            border-radius: 290486px;
+                                            display: block;
+                                            height: 1rem;
+                                            overflow: hidden;
+                                            padding: 0;
+                                            background-color:transparent;
+                                            animation-duration:{{ secondsLeft }}s;
+                                            animation-name:progress-increase;
+                                        }
+                                        @keyframes progress-increase {
+                                            from{
+                                                width:{{ timeLeft }}%;
+                                            }
+                                            to{
+                                                width:100%;
+                                            }
+                                        }
+                                        .progress-pay-bar::-webkit-progress-bar {
+                                            background-color: #23d160;
+                                        }
+
+                                        .progress-pay-bar::-webkit-progress-value {
+                                            background-color: #23d160;
+                                        }
+
+                                        .progress-pay-bar::-moz-progress-bar {
+                                            background-color: #23d160;
+                                        }
+
+                                        .progress-pay-bar::-ms-fill {
+                                            background-color: #23d160;
+                                            border: none;
+                                        }
+                                    </style>
+                                {% else %}
+                                    <div class="message is-danger">
+                                        <article class="message-body">
+                                            <b>Warning:</b> Your order has timed out without a payment being processed. If you already sent the payment contact <a target="_blank" href="/messages/new/?username=support&subject=Order {{ item.order.id }} payment [Payment Error]">support</a> to try and get your money back. If you have not made a payment, discard this order and try again.
+                                        </article>
+                                    </div>
+                                {% endif %}
+                                {% if not timeout %}
+                                    <p>
+                                        You have until <b>{{ time|date("F j, Y, g:i a") }} UTC</b> to make the payment. After you have sent the coins, this order will be marked as paid. <b>Please refresh this page manually to verify your payment.</b> If you send the coins after the payment window <b>your coins might be lost forever.</b> Support will attempt to refund you.
+                                    </p>
+                                    {% if app.request.get('showsigned') == 'true' %}
+                                        <a href="?showsigned=false"><i class="fa fa-edit"></i> Hide signed payment address</a>
+                                        <br /><br />
+                                        <textarea rows="10" class="textarea">{{ sign }}</textarea>
+                                    {% else %}
+                                        <a href="?showsigned=true"><i class="fa fa-edit"></i> Show signed payment address</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="column is-4">
+                                <div class="columns is-multiline">
+                                    <div class="column is-full">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns is-multiline is-gapless">
+                                                    <div class="column is-full">
+                                                        <h3 class="mt-xxs">Your Order</h3>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Title:</b></small>
+                                                    </div>
+                                                    <div class="column is-half" style="overflow:hidden;">
+                                                        <small class="tag"><b>{{ item.order.amount }}&nbsp;</b>x&nbsp;{{ item.order.title }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Subtotal:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if item.order.crypto == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif item.order.crypto == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif item.order.crypto == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ item.order.cryptoPrice }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Shipping:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if item.order.crypto == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif item.order.crypto == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif item.order.crypto == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ item.order.shippingCryptoPrice }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Total:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if item.order.crypto == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif item.order.crypto == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif item.order.crypto == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ item.order.cryptoTotal }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <hr class="hr-sm" />
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Subtotal:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ item.order.fiat }} {{ item.order.price }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Shipping:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ item.order.fiat }} {{ item.order.shippingPrice }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Total:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ item.order.fiat }} {{ item.order.total }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="column">
+                                <div class="message is-success">
+                                    <article class="message-body">
+                                        <i class="fa fa-check-circle"></i> This order has been paid.
+                                    </article>
+                                </div>
+                                <h3>It takes one confirmation for your order to be submitted to the vendor for review.</h3>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

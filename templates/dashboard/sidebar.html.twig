@@ -1,0 +1,93 @@
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;General</h3>
+    </div>
+    {% set route = app.request.get('_route') %}
+    {% if app.user.roles.0 == 'vendor' or app.user.roles.0 == 'buyer' %}
+        <a href="/dashboard/" class="panel-block {{ route == 'dashboard' ? 'is-active' : '' }}">
+            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Dashboard
+        </a>
+        <a href="/orders/" class="panel-block {{ route == 'orders' or route == 'order'? 'is-active' : '' }}">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;Orders
+            {% if app.user.roles.0 == 'vendor' and dashboard_notifications.getNewOrderTotal() != 0 %}
+                &nbsp;<div class="tag is-success">New</div>
+            {% endif %}
+        </a>
+        <a href="/messages/" class="panel-block {{ route == 'message' or route == 'messages' or route == 'newMessage' ? 'is-active' : '' }}">
+            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;Messages
+            {% if dashboard_notifications.getNewMessageTotal() != 0 %}
+                &nbsp;<div class="tag is-success">New</div>
+            {% endif %}
+        </a>
+        {% if app.user.roles.0 == 'buyer' %}
+            <a href="/wishlist/" class="panel-block {{ route == 'wishlist' ? 'is-active' : '' }}">
+                <i class="fa fa-heart" aria-hidden="true"></i>&nbsp;Wishlist
+            </a>
+        {% endif %}
+        <a href="/affiliates/" class="panel-block {{ route == 'affiliates' ? 'is-active' : '' }}">
+            <i class="fa fa-users" aria-hidden="true"></i>&nbsp;Affiliates
+        </a>
+    {% endif %}
+    {% if app.user.roles.0 == 'vendor' %}
+        <a href="/shipping/" class="panel-block {{ route == 'shipping' or route == 'newShipping' ? 'is-active' : '' }}">
+            <i class="fa fa-truck" aria-hidden="true"></i>&nbsp;Shipping
+        </a>
+        <a href="/listings/" class="panel-block {{ route == 'listings' or route == 'newListing' or route == 'tacListing' ? 'is-active' : '' }}">
+            <i class="fa fa-list" aria-hidden="true"></i>&nbsp;Listings
+        </a>
+    {% endif %}
+    {% if app.user.roles.0 == 'admin' %}
+        <a href="/staff/dashboard/" class="panel-block {{ route == 'staffDashboard' ? 'is-active' : '' }}">
+            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;Dashboard
+        </a>
+        <a href="/staff/disputes/" class="panel-block {{ route == 'staffDisputes' or route == 'staffDispute' ? 'is-active' : '' }}">
+            <i class="fa fa-gavel" aria-hidden="true"></i>&nbsp;Disputes
+            {% if dashboard_notifications.getDisputeTotal() != 0 %}
+                &nbsp;<div class="tag is-success">New</div>
+            {% endif %}
+        </a>
+        <a href="/staff/messages/" class="panel-block {{ route == 'staffMessages' or route == 'staffMessage' or route == 'newStaffMessage' ? 'is-active' : '' }}">
+            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;Messages
+            {% if dashboard_notifications.getNewMessageTotal() != 0 %}
+                &nbsp;<div class="tag is-success">New</div>
+            {% endif %}
+        </a>
+        <a href="/staff/reports/" class="panel-block {{ route == 'reports' ? 'is-active' : '' }}">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;Reports
+        </a>
+        <a href="/staff/categories/" class="panel-block {{ route == 'categories' ? 'is-active' : '' }}">
+            <i class="fa fa-folder" aria-hidden="true"></i>&nbsp;Categories
+        </a>
+        <a href="/staff/pick/" class="panel-block {{ route == 'staffPick' ? 'is-active' : '' }}">
+            <i class="fa fa-magic" aria-hidden="true"></i>&nbsp;Staff Picks
+        </a>
+    {% endif %}
+</div>
+<br>
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-gears" aria-hidden="true"></i>&nbsp;Settings</h3>
+    </div>
+    {% if app.user.roles.0 == 'vendor' or app.user.roles.0 == 'buyer' %}
+        <a href="/profile/" class="panel-block {{ route == 'profileEdit' ? 'is-active' : '' }}">
+            <i class="fa fa-user" aria-hidden="true"></i>&nbsp;Profile
+        </a>
+        <a href="/pgp/" class="panel-block {{ route == 'pgp' ? 'is-active' : '' }}">
+            <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;PGP
+        </a>
+        <a href="/currency/" class="panel-block {{ route == 'currency' or route == 'currencyVendor' ? 'is-active' : '' }}">
+            <i class="fa fa-dollar" aria-hidden="true"></i>&nbsp;Currency
+        </a>
+        <a href="/account/" class="panel-block {{ route == 'account' ? 'is-active' : '' }}">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;Account
+        </a>
+    {% endif %}
+    {% if app.user.roles.0 == 'admin' %}
+        <a href="/staff/account/" class="panel-block {{ route == 'staffAccount' ? 'is-active' : '' }}">
+            <i class="fa fa-gear" aria-hidden="true"></i>&nbsp;Account
+        </a>
+        <a href="/staff/pgp/" class="panel-block {{ route == 'staffPGP' ? 'is-active' : '' }}">
+            <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;PGP
+        </a>
+    {% endif %}
+</div>

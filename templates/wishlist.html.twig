@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Store{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="column is-four-fifths is-offset-one-fifth">
+            <div class="column is-10">
+                <div class="content">
+                    <div class="columns is-multiline">
+                        <div class="column is-full">
+                            <div class="tabs is-paddingless-left">
+                                <ul class="is-marginless-left">
+                                    <li></li>
+                                    <li role="nav" class="is-active">
+                                        <a><i class="fa fa-heart"></i>&nbsp;Wishlist</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="column is-full">
+                            {% if not listings %}
+                                <div class="message">
+                                    <article class="message-body">
+                                        <h2>You have no listings in your wishlist.</h2>
+                                    </article>
+                                </div>
+                            {% endif %}
+                            <div class="columns is-multiline">
+                                {% if link is not empty %}
+                                    <div class="column is-full">
+                                        <p class="is-block wishlist-link">{{ link }}</p>
+                                    </div>
+                                {% endif %}
+                                {% for listing in listings %}
+                                    <div class="column is-one-third">
+                                        <a href="/l/{{ listing.id }}/?wishlist={{ uuid }}" title="{{ listing.title }}" style="color:inherit;">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <figure class="image">
+                                                                <img src="/uploads/images/{{ listing_images.getImage(listing.uuid, 0) }}">
+                                                            </figure>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="columns is-multiline">
+                                                            <div class="column is-full">
+                                                                <p class="title is-6">{{ listing.title }}</p>
+                                                            </div>
+                                                            <div class="column">
+                                                                {{ listing.price }} {{ listing.fiat }}
+                                                            </div>
+                                                            <div class="column">
+                                                                <div class="is-pulled-right">
+                                                                    {% if listing.btc %}<i class="cc BTC"></i>{% endif %}
+                                                                    {% if listing.xmr %}<i class="cc XMR"></i>{% endif %}
+                                                                    {% if listing.zec %}<i class="cc ZEC"></i>{% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

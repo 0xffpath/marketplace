@@ -1,0 +1,80 @@
+<nav class="hero is-link">
+    <div class="columns">
+        <div class="column is-half">
+            <div class="column is-offset-1 is-paddingless-left">
+                <a class="nav-padding" style="height:20px;vertical-align:middle;" href="/home/">
+                    <img class="logo" src="/logo.png"/>
+                </a>
+                {% if app.user is not null and app.user.roles.0 != 'new_vendor' %}
+                    {% if app.user.roles.0 != 'admin' %}
+                        <a class="has-text-white-bis nav-padding" href="/dashboard/"><i class="fa fa-lg fa-bell"></i>&nbsp;{{ dashboard_notifications.getNewNotificationTotal() }}</a>
+                        <a class="has-text-white-bis nav-padding" href="/messages/"><i class="fa fa-lg fa-envelope"></i>&nbsp;{{ dashboard_notifications.getNewMessageTotal() }}</a>
+                        <a class="has-text-white-bis nav-padding" href="/orders/"><i class="fa fa-lg fa-shopping-cart"></i>&nbsp;{{ dashboard_notifications.getNewOrderTotal() }}</a>
+                    {% endif %}
+                    {% if app.user.roles.0 == 'admin' %}
+                        <a class="has-text-white-bis nav-padding is-marginless-left is-paddingless-left" href="/staff/messages/"><i class="fa fa-lg fa-envelope"></i>&nbsp;{{ dashboard_notifications.getNewMessageTotal() }}</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="column is-half">
+            <div class="column is-pulled-right">
+                {% if app.user is not null %}
+                    {% if app.user.roles.0 != 'new_vendor' %}
+                        <a class="has-text-white-bis nav-padding" href="/forum/"><i class="fa fa-comments" aria-hidden="true"></i>&nbsp;Forum</a>
+                        {% if app.user.roles.0 != 'admin' %}
+                            <a class="has-text-white-bis nav-padding" href="/support/"><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Support</a>
+                            <a class="has-text-white-bis nav-padding" href="/dashboard/"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Dashboard</a>
+                            <a class="has-text-white-bis nav-padding" href="/logout/"><i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;Logout</a>
+                        {% endif %}
+                        {% if app.user.roles.0 == 'admin' %}
+                            <a class="has-text-white-bis nav-padding" href="/staff/dashboard/"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Dashboard</a>
+                            <a class="has-text-white-bis nav-padding" href="/logout/"><i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;Logout</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="has-text-white-bis nav-padding" href="/logout/"><i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;Logout</a>
+                    {% endif %}
+                {% else %}
+                    <a class="has-text-white-bis nav-padding" href="/forum/"><i class="fa fa-comments" aria-hidden="true"></i>&nbsp;Forum</a>
+                    <a class="has-text-white-bis nav-padding" href="/login/"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login</a>
+                    <a class="has-text-white-bis nav-padding" href="/register/"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="hero is-white">
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            {% if app.user is not null and (app.user.roles.0 == 'vendor' or app.user.roles.0 == 'new_vendor') %}
+            {% else %}
+                {% set cat = app.request.get('cat') %}
+                {% set sub = app.request.get('sub') %}
+                <form class="navbar-item" action="/market/" type="get" role="search">
+                    <input type="hidden" name="sub" value="{{ sub }}"/>
+                    <div class="field input-group">
+                        <div class="select">
+                            <select class="search-select" name="cat">
+                                <option value="" {{ cat is not defined ? 'selected' }} >All</option>
+                                {% for option in get_categories.getAll() %}
+                                    <option {{ cat is defined and cat == option.0.id ? 'selected' }} value="{{ option.0.id }}" class="optParent">{{ option.0.title }}</option>
+                                    {% for sub in option.1 %}
+                                        <option {{ cat is defined and cat == sub.id ? 'selected' }}  value="{{ sub.id }}" class="optChild">{{ sub.title }}</option>
+                                    {% endfor %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <p class="input-table search-bar">
+                            <input type="text" class="input search-box" autocomplete="off" name="search" value="{{ app.request.get("search") }}" placeholder="Search the marketplace...">
+                        </p>
+                        <p class="input-table">
+                            <button type="submit" class="button is-link search-button">
+                                <i class="fa fa-search"></i>&nbsp;Search
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</nav>

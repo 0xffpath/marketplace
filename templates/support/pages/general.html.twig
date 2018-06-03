@@ -1,0 +1,201 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - General{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>General</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns is-multiline">
+                            <div class="column is-third">
+                                <p class="lead">
+                                    <i class="fa fa-eye-slash" aria-hidden="true"></i> Privacy
+                                </p>
+                                <p>
+                                    No JavaScript is used. No IP addresses of user accounts are stored. All vendors have PGP. The database is always encrypted through the use of homomorphic encryption. All files are served from our server, no third parties. View our <a href="/privacy/">privacy policy</a>.
+                                </p>
+                            </div>
+                            <div class="column is-third">
+                                <p class="lead">
+                                    <i class="fa fa-users" aria-hidden="true"></i> Multisig escrow
+                                </p>
+                                <p>
+                                    2-of-3 multisignature is available to buyers that wish to use it for Bitcoin. If not the marketplace will form a 2-of-2 with the vendor. Monero and Zcash use a direct deposit as escrow. Every order has a unique currency address, meaning there are no account deposits.
+                                </p>
+                            </div>
+                            <div class="column is-third">
+                                <p class="lead">
+                                    <i class="fa fa-money" aria-hidden="true"></i> Financial
+                                </p>
+                                <p>
+                                    The marketplace is available in Bitcoin, Monero, and Zcash. You can also make money from commissions with users that sign up with your code. Vendors are able to upload a HD wallet master public key to create unique bitcoin addresses for each transaction.
+                                </p>
+                            </div>
+                            <div class="column is-full">
+                                <h3 id="setup">Recommended setup for Windows, OSX, and GNU + Linux.</h3>
+                                <h4>Bitcoin:</h4>
+                                <div style="margin-left:10px;">
+                                    <b>Requirements:</b>
+
+                                    <ul>
+                                        <li>Electrum software Bitcoin wallet: <a href="https://electrum.org/#download">https://electrum.org/#download</a>
+                                        </li>
+                                        <li>5 to 30 minutes of your time depending on your computer knowledge. Most of this is a
+                                            one time setup.
+                                        </li>
+                                        <li>(Optional): Instead of Electrum you can use Coinbin: <a href="https://coinb.in">https://coinb.in</a>.
+                                        </li>
+                                        <li>(Optional): A regular USB stick for your backup of this data - Always keep backups
+                                            on a separate machine or medium. Preferably encrypted.
+                                        </li>
+                                    </ul>
+                                    <p>Bitcoin Wallet Address, Public and Private key examples:</p>
+                                    <div style="margin-left:10px;">
+                                        <p><b>Wallet Address:</b> 1EyJUTjJiY1ehkwvgN6EUDZXdhQVEsSTtX - (Not needed for
+                                            multi-sig)</p>
+                                        <p><b>Address Public Key:</b>
+                                            0382f5fd838a1f7f9170f13cbbafb7baf059b4219db1091295159eb382cdf7a416 - <i>(Needed for
+                                                multisig setup)</i></p>
+                                        <p>You can access your keys by right clicking any <i>**Wallet Address**</i> in Electrum.
+                                        </p>
+                                    </div>
+                                </div>
+                                <br />
+                                <h4>Monero:</h4>
+                                <div style="margin-left:10px;">
+                                    <b>Requirements:</b>
+                                    <ul>
+                                        <li>Use Monero wallet: <a href="https://getmonero.org/downloads/">https://getmonero.org/downloads/</a>
+                                        </li>
+                                        <li>5 to 30 minutes of your time depending on your computer knowledge. Most of this is a
+                                            one time setup.
+                                        </li>
+                                        <li>(Optional): Instead of a Monero wallet you can use MyMonero: <a
+                                                    href="https://mymonero.com/">https://mymonero.com/</a>.
+                                        </li>
+                                        <li>(Optional): A regular USB stick for your backup of this data - Always keep backups
+                                            on a separate machine or medium. Preferably encrypted.
+                                        </li>
+                                        <li><b>*Note multisignature is not available for Monero yet.</b></li>
+                                    </ul>
+                                    <p>Monero Wallet Address example:</p>
+                                    <div style="margin-left:10px;">
+                                        <p><b>Wallet Address:</b>
+                                            44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A
+                                        </p>
+                                    </div>
+                                </div>
+                                <br />
+                                <h4>Zcash:</h4>
+                                <div style="margin-left:10px;">
+                                    <b>Requirements:</b>
+                                    <ul>
+                                        <li>Use Monero wallet: <a href="https://z.cash/downloads/">https://z.cash/downloads/</a>
+                                        </li>
+                                        <li>5 to 30 minutes of your time depending on your computer knowledge. Most of this is a
+                                            one time setup.
+                                        </li>
+                                        <li>(Optional): A regular USB stick for your backup of this data - Always keep backups
+                                            on a separate machine or medium. Preferably encrypted.
+                                        </li>
+                                        <li><b>*Note multisignature is not available for Zcash yet.</b></li>
+                                    </ul>
+                                    <p>Zcash Wallet Address example:</p>
+                                    <div style="margin-left:10px;">
+                                        <p><b>Wallet Address:</b>
+                                            44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A
+                                        </p>
+                                    </div>
+                                </div>
+                                <h3 id="faq">Quick FAQ.</h3>
+                                <div style="margin-left:10px;">
+                                    <b>Bitcoin:</b>
+                                    <div style="margin-left:10px;">
+                                        <p><b>What happens when I lose the private key of a 2-2 key as a vendor?</b></p>
+                                        <p>You will not be able to retrieve the coins in escrow.</p>
+                                        <p><b>What happens if the staff lose control of the Bitcoin?</b></p>
+                                        <p>The coins are held in a timelock and will be released to the buyer after 30 days.</p>
+                                        <p><b>What happens when a vendor gets banned and I have a 2-2 transaction with him?</b>
+                                        </p>
+                                        <p>The refund process will take much longer as they have to be paid from our own
+                                            pockets.</p>
+                                        <p><b>What happens when I lose the private keys to a 2-3 key as a vendor?</b></p>
+                                        <p>If the customer has his key he can contact support and we will finalize the order for
+                                            you.</p>
+                                        <p><b>What happens if I as customer lose my multi-sig key?</b></p>
+                                        <p>If the vendor is inactive on this market you will need to wait for him to return in
+                                            case of a refund.</p>
+                                        <p><b>What happens if I lose access to my Bitcoin return address in my settings?</b></p>
+                                        <p>If we have not issued a refund you can always change it. If we have issued one the
+                                            coins are lost.</p>
+                                        <p><b>Do I need to sign a transaction as a customer?</b></p>
+                                        <p>No, this is done automatically. Only the one time setup and possible signing for a
+                                            dispute.</p>
+                                        <p><b>Who has access to the coins in Escrow?</b></p>
+                                        <p>Nobody, the address has no private key. The coins are suspended by the two or three
+                                            keys until a transaction is signed.</p>
+                                        <p><b>Is there any information I need to save from a multi-sig order?</b></p>
+                                        <p>As customer and vendor it is handy to copy the "Multisig Redeemscript" so orders can
+                                            be finalized without the market.</p>
+                                        <p>As a vendor download the locktime transactions which can be used to finalize the
+                                            order after 90 days by yourself.</p>
+                                        <p><b>Can I change or remove my multi-sig address while orders is in transit?</b></p>
+                                        <p>Yes, but don't lose track off the assigned addresses.</p>
+                                        <p><b>Can I change multi-sig keys on a shipped or accepted order transaction?</b></p>
+                                        <p>No, if a key has been assigned to a transaction it is not possible to change
+                                            this.</p>
+                                        <p><b>Can I change my Bitcoin return (refund) address while my order is in transit /
+                                                dispute?</b></p>
+                                        <p>For customers, yes. For vendors, yes but the address will be assigned to current
+                                            Locktime transactions.</p>
+                                        <br>
+                                    </div>
+                                    <b>Monero/Zcash:</b>
+                                    <div style="margin-left:10px;">
+                                        <p><b>What happens when I lose the private key of the Monero/Zcash address as a
+                                                vendor?</b></p>
+                                        <p>Change the address in your Currency tab. Any new coins will be deposited in the new
+                                            address.</p>
+                                        <p><b>What happens when a vendor gets banned and I have a transaction with him?</b></p>
+                                        <p>It will be refunded.</p>
+                                        <p><b>What happens if I as customer lose my private key?</b></p>
+                                        <p>Change the address in your Currency tab. Any new refunds will be deposited in the new
+                                            address.</p>
+                                        <p><b>What happens if I lose access to my Monero return address in my settings?</b></p>
+                                        <p>If we have not issued a refund you can always change it. If we have issued one the
+                                            coins are lost.</p>
+                                        <p><b>Who has access to the coins in Escrow?</b></p>
+                                        <p>The marketplace.</p>
+                                        <p><b>Can I change or remove my address while orders is in transit?</b></p>
+                                        <p>Yes, but don't lose track off the assigned addresses.</p>
+                                        <p><b>Can I change Monero/Zcash address on a shipped or accepted order transaction?</b>
+                                        </p>
+                                        <p>Yes, change the address in your settings.</p>
+                                        <p><b>Can I change my Monero return (refund) address while my order is in transit /
+                                                dispute?</b></p>
+                                        <p>For customers, yes. For vendors, yes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

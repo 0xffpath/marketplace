@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Dashboard{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a href="?tab=orders"><i class="fa fa-info-circle"></i>&nbsp;Overview</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                <div class="is-bordered">
+                                    <div class="has-text-centered">
+                                        {% set xpNext = (profile.level + 1) * (profile.level + 1) * 1000 %}
+                                        <h3>Level {{ profile.level }}</h3>
+                                        <progress class="progress is-success is-medium is-marginless-bottom" value="{{ (profile.experience / xpNext) * 100 }}" max="100">{{ (profile.experience / xpNext) * 100 }}%</progress>
+                                        <small class="has-text-grey">{{ profile.experience }} / {{ xpNext }} XP [{{ ((profile.experience / xpNext) * 100)|round }}%]</small>
+                                    </div>
+                                    <p class="is-pulled-left">XP to next level: <b>{{ (xpNext - profile.experience) > 0 ? (xpNext - profile.experience) : 0 }}</b></p>
+                                    <a target="_blank" href="/support/experience/" class="is-pulled-right">[what is this?]</a>
+                                </div>
+                            </div>
+                            <div class="column is-one-third">
+                                <h3 class="header">My Orders</h3>
+                                <hr class="hr-none"/>
+                                {% set status = dashboard_notifications.getOrderStatus() %}
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.confirmation }}</h3>
+                                        <p class="item">&nbsp;orders awaiting confirmations</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-clock-o fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-none"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.pending }}</h3>
+                                        <p class="item">&nbsp;orders awaiting acceptance</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-check-circle-o fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-none"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.accepted }}</h3>
+                                        <p class="item">&nbsp;orders processing</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-refresh fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-none"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.shipped }}</h3>
+                                        <p class="item">&nbsp;orders in transit</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-truck fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-none"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.finalized }}</h3>
+                                        <p class="item">&nbsp;finalized orders</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-check fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-none"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.disputed }}</h3>
+                                        <p class="item">&nbsp;disputed orders</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-balance-scale fa-2x"></i>
+                                    </div>
+                                </div>
+                                <hr class="hr-none"/>
+                                <div class="columns is-marginless-bottom is-gapless">
+                                    <div class="column is-10 is-pulled-left">
+                                        <h3 class="item">{{ status.canceled }}</h3>
+                                        <p class="item">&nbsp;canceled orders</p>
+                                    </div>
+                                    <div class="column is-2 is-pulled-right">
+                                        <i class="fa fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-one-third">
+                                <h3 class="header">New Messages</h3>
+                                <hr class="hr-sm"/>
+                                {% if threads %}
+                                    <table style="font-size:14px;" class="table">
+                                        {% for thread in threads %}
+                                                <tr>
+                                                    <td>
+                                                        <a href="/message/{{ thread.uuid }}/">
+                                                            {{ thread.subject }}
+                                                        </a>
+                                                    </td>
+                                                    <td>{{ thread.lastMessage|date("F j, Y, g:i a") }} UTC</td>
+                                                    <td>
+                                                        <a class="button is-warning is-small" href="/message/{{ thread.uuid }}/">View</a>
+                                                    </td>
+                                                </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <h4><i class="fa fa-info-circle"></i> You have no new messages.</h4>
+                                {% endif %}
+                            </div>
+                            <div class="column is-one-third">
+                                <h3 class="header">Notifications</h3>
+                                <hr class="hr-sm"/>
+                                {% if notifications %}
+                                    <table style="font-size:14px;" class="table">
+                                        {% for notification in notifications %}
+                                            <tr>
+                                                <td class="has-text-{{ notification.bootstrap }}">
+                                                    {{ notification.title }} {{ notification.type }}
+                                                </td>
+                                                <td>{{ notification.notificationDate|date("F j, Y, g:i a") }} UTC</td>
+                                                <td>
+                                                    <a class="button is-warning is-small" href="/notification/remove/{{ notification.id }}/">Dismiss</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <h4><i class="fa fa-info-circle"></i> No new notifications.</h4>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

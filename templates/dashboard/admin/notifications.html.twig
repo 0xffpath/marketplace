@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Notifications{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-2 col-md-offset-1">
+            {% include '/dashboard/sidebar.html.twig' %}
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <div class="col-md-offset-1">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <h2>Notifications</h2>
+                                        </div>
+                                        <div class="col-md-2 pull-right">
+                                            <h2><a href="/notifications/clear/" class="btn btn-sm btn-custom">Clear All</a></h2>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <hr />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if not notifications %}
+                                <div class="alert" role="alert">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <i class="col-1 fa fa-bell fa-4x text-secondary" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <h2>You have no notifications.</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {% for order in notifications %}
+                                    {% if order.type == 'ordered' %}
+                                        <div class="alert alert-info alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-check fa-4x text-info" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has been paid.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% elseif order.type == 'confirmed' %}
+                                        <div class="alert alert-info alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-clock-o fa-4x text-info" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has been confirmed by the blockchain.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% elseif order.type == 'accepted' %}
+                                        <div class="alert alert-success alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-thumbs-up fa-4x text-success" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has been accepted by the vendor.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% elseif order.type == 'rejected' %}
+                                        <div class="alert alert-danger alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-thumbs-down fa-4x text-danger" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has been rejected by the vendor.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% elseif order.type == 'timeout' %}
+                                        <div class="alert alert-danger alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-exclamation-triangle fa-4x text-danger" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has run out of time.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% elseif order.type == 'shipped'%}
+                                        <div class="alert alert-success alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-truck fa-4x text-success" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has been shipped by the vendor.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% elseif order.type == 'finalized'%}
+                                        <div class="alert alert-success alert-dismissible" role="alert">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <i class="col-1 fa fa-check-circle fa-4x text-success" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <p style="font-size:120%;">The following order has been finalized.</p>
+                                                    <h5 class="font-weight-normal text-indent">{{order.amount}} x <b>{{order.title}}</b></h5>
+                                                    <i>{{order.start}}</i>
+                                                </div>
+                                                <button type="button" class="col-md-1 mb-5 close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

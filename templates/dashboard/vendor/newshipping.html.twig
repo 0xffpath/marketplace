@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - New Listing{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/shipping/"><i class="fa fa-list"></i>&nbsp;Shipping</a></li>
+                                        <li role="nav" class="is-active"><a href="/shipping/new/"><i class="fa fa-plus"></i>&nbsp;New</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(shippingForm) }}
+                                {{  form_errors(shippingForm) }}
+                                <div class="field">
+                                    <label class="label">Option:</label>
+                                    <div class="control">
+                                        {{ form_widget(shippingForm.option) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <label class="label">Price ({{ currency }}):</label>
+                                        {{ form_widget(shippingForm.price) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(shippingForm.add) }}
+                                    </div>
+                                </div>
+                                {% for flashMessage in app.session.flashbag.get('shippingError') %}
+                                    <br />
+                                    <div class="alert alert-danger text-center">
+                                        <span class="text-danger">{{ flashMessage }}</span>
+                                    </div>
+                                {% endfor %}
+
+                                {{ form_end(shippingForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

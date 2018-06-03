@@ -1,0 +1,261 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - {{ order.title }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-2 col-md-offset-1">
+            {% include '/dashboard/sidebar.html.twig' %}
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <div class="col-md-offset-1">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-10">
+                                <div class="page-header">
+                                    <h2>Order <small>#{{ order.id }}</small></h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i> Details
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="card-block">
+                                            <div class="row p-1">
+                                                <div class="col-md-12">
+                                                    {{ order.amount }} x <a href="/">{{ order.title }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                            <tr>
+                                                <td width="20%">
+                                                    Shipping Type:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.shipping }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Delivery:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.delivery }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Multisignature:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.multisig }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%">
+                                                    Start Date:
+                                                </td>
+                                                <td width="80%">
+                                                    {{ order.start }}
+                                                </td>
+                                            </tr>
+                                            {% if order.status == 'shipped' %}
+                                                <tr>
+                                                    <td width="20%">
+                                                        Shipped Date:
+                                                    </td>
+                                                    <td width="80%">
+                                                        {{ order.shipped }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="20%">
+                                                        Auto Finalize:
+                                                    </td>
+                                                    <td width="80%">
+                                                        {{ order.auto }} <a href="/" class="label label-warning"><i class="fa fa-clock-o" aria-hidden="true"></i> Extend by 5 days</a><br />
+                                                        <small class="text-muted">In {{ order.timeout }} </small><br />
+                                                        <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: If you do not receive your order before the timer runs out, please either dispute the order or click the "Extend" button above.</small>
+                                                    </td>
+                                                </tr>
+                                            {% elseif order.status == 'rejected' %}
+                                                <tr>
+                                                    <td width="20%">
+                                                        Refund:
+                                                    </td>
+                                                    <td width="80%">
+                                                        <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: The order was rejected by the vendor. If you have not recieved your money back, <a href="/support">contact support</a> with your order id: <code>{{ order.id }}</code></small>
+                                                    </td>
+                                                </tr>
+                                            {% elseif order.status == 'auto' %}
+                                                <tr>
+                                                    <td width="20%">
+                                                        Shipped Date:
+                                                    </td>
+                                                    <td width="80%">
+                                                        {{ order.shipped }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="20%">
+                                                        Auto Finalized:
+                                                    </td>
+                                                    <td width="80%">
+                                                        <small class="text-primary" style="font-size:12px;"><i class="fa fa-info-circle" aria-hidden="true"></i> Notice: The order <code>{{ order.id }}</code> has been auto finalized. It was finalized at {{ order.auto }}.</small>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-envelope" aria-hidden="true"></i> Messages
+                                    </div>
+                                    <div class="panel-body">
+                                        {% include '/dashboard/shared/message.html.twig' %}
+                                        <div class="row">
+                                            <div class="col-md-10 col-md-offset-2 col-md-pull-1">
+                                                {{ form_start(messageForm) }}
+                                                {{ form_errors(messageForm) }}
+
+                                                {{ form_row(messageForm.message) }}
+                                                <br>
+                                                {{ form_row(messageForm.submit) }}
+
+                                                {{ form_end(messageForm) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                    {% if order.status == 'shipped' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="btn btn-success btn-lg btn-block" href="/"><i class="fa fa-check" aria-hidden="true"></i> Finalize</a>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="btn btn-danger btn-lg btn-block" href="/"><i class="fa fa-gavel" aria-hidden="true"></i> Dispute</a>
+                                            </div>
+                                        </div>
+                                    {% elseif order.status == 'rejected' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="btn btn-danger btn-lg btn-block" href=""><i class="fa fa-thumbs-down" aria-hidden="true"></i> Rejected</a>
+                                            </div>
+                                        </div>
+                                    {% elseif order.status == 'auto' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="btn btn-secondary btn-lg btn-block" href=""><i class="fa fa-clock-o" aria-hidden="true"></i> Auto Finalized</a>
+                                            </div>
+                                        </div>
+                                    {% elseif order.status == 'finalized' %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="btn btn-default btn-lg btn-block" href=""><i class="fa fa-clock-o" aria-hidden="true"></i> Finalized</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <small><b>Subtotal:</b></small>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <small><i class="fa fa-btc" aria-hidden="true"></i> {{ order.price }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <small><b>Shipping:</b></small>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <small><i class="fa fa-btc" aria-hidden="true"></i> {{ order.shipping_price }}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <hr class="hr-sm" />
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <small><b>Total:</b></small>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <small><i class="fa fa-btc" aria-hidden="true"></i> {{ order.total }}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%;">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h3><a href="/vendor/{{ order.vendor }}">{{ order.vendor }}</a></h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <p class="text-light-grey">Know your vendor!</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top:6px;">
+                                                        <div class="col-md-12">
+                                                            <small style="font-size:12px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Last Seen: 2017-08-08 17:44:30 UTC</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top:4px;">
+                                                        <div class="col-md-12">
+                                                            <small style="font-size:12px;"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Feedback: <a href="/">100%</a></small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top:4px;">
+                                                        <div class="col-md-12">
+                                                            <small style="font-size:12px;"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Orders: 198</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top:10px;">
+                                                        <div class="col-md-12">
+                                                            <a class="btn btn-sm btn-default" style="font-size:12px;"><i class="fa fa-envelope" aria-hidden="true"></i> Send Message</a>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - {{ order.title }}{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/cryptocoins.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        {% if order.flag == true %}
+            <div class="column is-8 is-offset-2">
+                <div class="message is-danger">
+                    <article class="message-body">
+                        This item is currently unavailable.
+                    </article>
+                </div>
+            </div>
+        {% else %}
+            <div class="columns is-multiline">
+                <div class="column is-8 is-offset-2">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav" class="is-active"><a>{{ order.title }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-8">
+                                <table class="table table-bordered" style="margin-top:5px;">
+                                    <tbody>
+                                    <tr>
+                                        <td width="20%">
+                                            Vendor:
+                                        </td>
+                                        <td width="80%">
+                                            {{ order.vendor.username }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">
+                                            Shipping Type:
+                                        </td>
+                                        <td width="80%">
+                                            {% if order.shipping == 'physical' %}
+                                                Physical Delivery
+                                            {% elseif order.shipping == 'digital' %}
+                                                Digital Delivery
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">
+                                            Delivery:
+                                        </td>
+                                        <td width="80%">
+                                            {{ order.delivery }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">
+                                            Currency:
+                                        </td>
+                                        <td width="80%">
+                                            {% if order.crypto_currency == 'btc' %}
+                                                Bitcoin
+                                            {% elseif order.crypto_currency == 'xmr' %}
+                                                Monero
+                                            {% elseif order.crypto_currency == 'zec' %}
+                                                Zcash
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%">
+                                            Multisig:
+                                        </td>
+                                        <td width="80%">
+                                            {{ multisig }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                {{ form_start(messageForm) }}
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_widget(messageForm.message) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_widget(messageForm.encrypt) }} Encrypt with the vendor's PGP key <small class="text-light-grey">(optional)</small>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control is-pulled-left">
+                                        {{ form_widget(messageForm.coupon) }}
+                                    </div>
+                                    <div class="control is-pulled-right">
+                                        {{ form_widget(messageForm.continue) }}
+                                    </div>
+                                </div>
+                                {{ form_end(messageForm) }}
+                            </div>
+                            <div class="column is-4">
+                                <div class="columns is-multiline">
+                                    <div class="column is-full">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns is-multiline is-gapless">
+                                                    <div class="column is-full">
+                                                        <h3 class="mt-xxs">Your Order</h3>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Title:</b></small>
+                                                    </div>
+                                                    <div class="column is-half" style="overflow:hidden;">
+                                                        <small class="tag" title="{{ order.title }}">{{ order.amount }}<b>x {{ order.title }}</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Subtotal:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if order.crypto_currency == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif order.crypto_currency == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif order.crypto_currency == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ order.crypto_price }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Shipping:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if order.crypto_currency == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif order.crypto_currency == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif order.crypto_currency == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ order.crypto_shipping_price }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Total:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>
+                                                            {% if order.crypto_currency == 'btc' %}
+                                                                <i class="cc BTC" aria-hidden="true"></i>
+                                                            {% elseif order.crypto_currency == 'xmr' %}
+                                                                <i class="cc XMR" aria-hidden="true"></i>
+                                                            {% elseif order.crypto_currency == 'zec' %}
+                                                                <i class="cc ZEC" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                            {{ order.crypto_total }}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <hr class="hr-sm" />
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Subtotal:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ order.fiat }} {{ order.price }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Shipping:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ order.fiat }} {{ order.shipping_price }}</small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small><b>Total:</b></small>
+                                                    </div>
+                                                    <div class="column is-half">
+                                                        <small>{{ order.fiat }} {{ order.total }}</small>
+                                                    </div>
+                                                    {% if order.discount != 0 %}
+                                                        <div class="column is-full">
+                                                            <hr class="hr-sm" />
+                                                        </div>
+                                                        <div class="column is-half">
+                                                            <small><b>Original Total:</b></small>
+                                                        </div>
+                                                        <div class="column is-half">
+                                                            <small>{{ order.fiat }} {{ order.discount + order.total }}</small>
+                                                        </div>
+                                                        <div class="column is-half">
+                                                            <small><b>Savings of:</b></small>
+                                                        </div>
+                                                        <div class="column is-half">
+                                                            <small>{{ order.fiat }} {{ order.discount }}</small>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column is-full is-gapless">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns is-multiline is-gapless">
+                                                    <div class="column is-full">
+                                                        <h3><a target="_blank" href="/profile/{{ order.vendor.username }}/">{{ order.vendor.username }}</a></h3>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <p class="text-light-grey">Know your vendor!</p>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <span class="tag is-success"><i class="fa fa-star"></i>&nbsp;Verified</span>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <small style="font-size:12px;"><i class="fa fa-clock-o" aria-hidden="true"></i> Last Seen: {{ order.vendor.lastSeen|date("Y-m-d") }} UTC</small>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <small style="font-size:12px;">
+                                                            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Feedback:
+                                                            {% if order.vendor.totalFeedback %}
+                                                                {% set rating = (order.vendor.positive+(order.vendor.neutral*0.8))/order.vendor.totalFeedback*100 %}
+                                                                <a target="_blank" href="/profile/{{ order.vendor.username }}/?tab=feedback">{{ rating|round }}%</a>
+                                                            {% else %}
+                                                                <a target="_blank" href="/profile/{{ order.vendor.username }}/?tab=feedback">None</a>
+                                                            {% endif %}
+                                                        </small>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <small style="font-size:12px;"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Orders: {{ order.vendor.totalSell }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column is-full">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns">
+                                                    <div class="column is-full">
+                                                        <p>By continuing and completing this order you agree to the vendor's <a href="/profile/test/?tab=tac">Terms & Conditions</a>. If you disagree please cancel this order and contact the vendor first.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column is-full">
+                                        <div class="card">
+                                            <div class="card-content">
+                                                <div class="columns is-multiline is-gapless">
+                                                    <div class="column is-full">
+                                                        <h3 class="mt-xxs">Vendor PGP</h3>
+                                                    </div>
+                                                    <div class="column is-full">
+                                                        <textarea class="textarea" rows="3">{{ pgp }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

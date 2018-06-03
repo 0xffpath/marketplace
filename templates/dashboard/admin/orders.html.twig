@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Orders{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-2 col-md-offset-1">
+            {% include '/dashboard/sidebar.html.twig' %}
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <div class="col-md-offset-1">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <h2>Orders</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <hr />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table style="font-size:14px;" class="table">
+                            {% if orders %}
+                                <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Item(s)</th>
+                                    <th>Vendor</th>
+                                    <th>Total</th>
+                                    <th>Shipping</th>
+                                    <th>Auto-Finalize</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for order in orders %}
+                                    <tr>
+                                        <td scope="row">#{{ order.id }}</td>
+                                        <td>{{order.amount}} x <a href="{{ order.item }}">{{ order.title }}</a></td>
+                                        <td><a href="/vendor/{{ order.vendor }}">{{ order.vendor }}</a></td>
+                                        <td>BTC {{ order.total }} <br> <small class="text-light-grey">USD 2.19</small></td>
+                                        <td>{{ order.shipping }} <br> <small class="text-light-grey">{{ order.delivery }}</small></td>
+                                        <td>{{ order.auto }}</td>
+                                        <td><span class="label label-{{ order.bootstrap }}">{{ order.status }}</span></td>
+                                        <td><a class="btn btn-primary btn-sm" href="/order/{{order.id}}/">Details</a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            {% else %}
+                                <div class="bd-callout">
+                                    <div class="row">
+                                        <i class="col-1 fa fa-shopping-cart fa-4x text-secondary" aria-hidden="true"></i>
+                                        <div class="col-10">
+                                            <h4 class="mt-3">You have no orders!</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

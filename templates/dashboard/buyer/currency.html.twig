@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cyfer - Currency{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-one-fifths">
+                <div class="column is-10 is-offset-2">
+                    {% include '/dashboard/sidebar.html.twig' %}
+                </div>
+            </div>
+            <div class="column is-four-fifths">
+                <div class="column is-10">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/account/"><i class="fa fa-gears"></i>&nbsp;Password</a></li>
+                                        <li role="nav"><a href="/pgp/"><i class="fa fa-lock"></i>&nbsp;PGP</a></li>
+                                        <li role="nav" class="is-active"><a href="/currency/"><i class="fa fa-dollar"></i>&nbsp;Currency</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(currencyForm) }}
+                                <div class="field">
+                                    <div class="select">
+                                        {{ form_widget(currencyForm.currency) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        {{ form_row(currencyForm.save) }}
+                                    </div>
+                                </div>
+                                {% if form_errors(currencyForm.currency) %}
+                                    <br/>
+                                    <div class="alert alert-danger text-center">
+                                        <span class="text-danger">Invalid Currency.</span>
+                                    </div>
+                                {% endif %}
+                                {% for flashMessage in app.session.flashbag.get('currencySuccess') %}
+                                    <br/>
+                                    <div class="alert alert-success text-center">
+                                        <span class="text-success">{{ flashMessage }}</span>
+                                    </div>
+                                {% endfor %}
+                                {{ form_end(currencyForm) }}
+                            </div>
+                            <div class="column is-full">
+                                {{ form_start(cryptoForm) }}
+                                <p>You need to enter a cryptocurrency addresses here, which will be used for withdrawals, refunds, and the profits from your referrals. Make sure this address is up to date and you have access to the incoming Bitcoins.</p>
+                                <div class="field">
+                                    <label class="label">Bitcoin Address</label>
+                                    <div class="control">
+                                        {{ form_widget(cryptoForm.bitcoin) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Bitcoin Key</label>
+                                    <div class="control">
+                                        {{ form_widget(cryptoForm.bitcoinPublic) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Monero Address</label>
+                                    <div class="control">
+                                        {{ form_widget(cryptoForm.monero) }}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Zcash Address</label>
+                                    <div class="control">
+                                        {{ form_widget(cryptoForm.zcash) }}
+                                    </div>
+                                </div>
+                                <span class="text-danger"><i class="fa fa-info-circle"></i> These are <u>not</u> deposit addresses. Cyfer does not require you to deposit funds. <a href="/support/">More information on how to order.</a></span>
+                                <br/><br/>
+                                <div class="field">
+                                    <label class="label">Enter Pin</label>
+                                    <div class="control">
+                                        {{ form_widget(cryptoForm.pin) }}
+                                    </div>
+                                </div>
+                                {{ form_row(cryptoForm.save) }}
+                                {% for flashMessage in app.session.flashbag.get('cryptoError') %}
+                                    <br/>
+                                    <div class="alert alert-danger text-center">
+                                        <span class="text-danger">{{ flashMessage }}</span>
+                                    </div>
+                                {% endfor %}
+                                {% for flashMessage in app.session.flashbag.get('cryptoSuccess') %}
+                                    <br/>
+                                    <div class="alert alert-success text-center">
+                                        <span class="text-success">{{ flashMessage }}</span>
+                                    </div>
+                                {% endfor %}
+
+                                {{ form_end(cryptoForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

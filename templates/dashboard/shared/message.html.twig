@@ -1,0 +1,19 @@
+<div class="columns is-multiline">
+    {% for message in messages %}
+        <div class="column is-full" {{ app.user.username == message.getUsername() ? 'style="background-color:#f7f5f0;"' : '' }}>
+            <div class="columns">
+                <div class="column is-4">
+                    <a href="/profile/{{ message.getUsername() }}/"><b>{{ message.getUsername()  }}</b></a>:
+                    {% if get_profile.getRole(message.getUsername()) == 'admin' %}
+                        <br><label class="tag is-danger"><i class="fa fa-gavel"></i>&nbsp;Cyfer Staff</label>
+                    {% endif %}
+                    <br />
+                    <small><i>{{ message.getMessageDate()|date("F j, Y, g:i a") }} UTC</i></small>
+                </div>
+                <div class="column is-8">
+                    {{ message.getMessage()|raw|nl2br  }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

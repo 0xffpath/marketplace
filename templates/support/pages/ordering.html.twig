@@ -1,0 +1,56 @@
+{% extends '/base.html.twig' %}
+
+{% block title %}Cyfer - Ordering{% endblock %}
+{% block nav %}{% include '/nav.html.twig' %}{% endblock %}
+
+{% block body %}
+    <br />
+    <div class="container-fluid">
+        <div class="columns is-multiline">
+            <div class="column is-four-fifths is-offset-one-fifth">
+                <div class="content">
+                    <div class="column is-10">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="tabs is-paddingless-left">
+                                    <ul class="is-marginless-left">
+                                        <li></li>
+                                        <li role="nav"><a href="/support/">Support/FAQs</a></li>
+                                        <li role="nav" class="is-active"><a>Ordering</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-full">
+                                <h3 id="order">Ordering.</h3>
+                                <p><b>Steps:</b></p>
+                                <ol>
+                                    <li>Add a refund address for the cryptocurrency you are using.</li>
+                                    <li>If you are using Bitcoin, consider using multi-signature. If you don't then the market
+                                        forms a 2-of-2 transaction with just the market and vendor. This puts the refund in the
+                                        hands of the vendor.
+                                    </li>
+                                    <li>Click order button on the item you wish to buy.</li>
+                                    <li>Deposit <b>exactly</b> the amount shown into the address given.</li>
+                                    <li>Enter your mailing address into the text area. Please encrypt your address through <a>auto-encrypt</a>
+                                        or, more securely, through <a>GPG</a>. If you choose not to use auto-encrypt, then copy
+                                        the vendor's PGP key from the panel on the right.
+                                    </li>
+                                    <li>The following possibilities can now happen:
+                                        <div style="margin-left:10px;">
+                                            <p>Vendor accepts => ships item => You finalise</p>
+                                            <p>Vendor rejects => the funds are deposited back into your refund address.</p>
+                                            <p>Vendor accepts => does not ship => you dispute => we look at shipping codes, talk
+                                                to vendor, etc => you are refunded if the item didn't reach you. </p>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
